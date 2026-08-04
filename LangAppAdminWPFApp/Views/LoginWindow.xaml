@@ -4,13 +4,96 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:LangApp.Admin.WPF.Views"
-        xmlns:mv="clr-namespase:LangApp.Admin.WPF.ViewModels"
+        xmlns:vm="clr-namespace:LangApp.Admin.WPF.ViewModels"
         mc:Ignorable="d"
-        Title="LoginWindow" Height="450" Width="800">
+        Title="LoginWindow" Height="800" Width="450">
     <Window.DataContext>
-        <vm:LoginWindowViewModel>
+        <vm:LoginWindowViewModel/>
     </Window.DataContext>
     <Grid>
-        
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="131*"/>
+            <RowDefinition Height="131*"/>
+            <RowDefinition Height="226*"/>
+            <RowDefinition Height="35*"/>
+            <RowDefinition Height="131*"/>
+            <RowDefinition Height="131*"/>
+        </Grid.RowDefinitions>
+
+        <TextBlock
+               Grid.Row="0"
+               VerticalAlignment="Top"
+               HorizontalAlignment="Center"
+               FontSize="24"
+               FontWeight="SemiBold" Height="32" Width="184" Margin="0,94,0,0">
+
+        <Run Text="LangApp"
+             Foreground="#172554"/>
+
+        <Run Text=" Admin"
+             Foreground="#8B7CF6"/>
+
+        </TextBlock>
+
+        <StackPanel Grid.Row="1" 
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center" Height="86" Width="258">
+
+            <TextBlock 
+           Text="Welcome back"
+           
+           FontSize="38"
+           FontWeight="Bold"
+           Foreground="#172554">
+            </TextBlock>
+
+            <TextBlock Text="Sign in to manage LangApp"
+               HorizontalAlignment="Center"
+               Margin="0,8,0,0"
+               FontSize="21"
+               Foreground="#64748B"/>
+
+        </StackPanel>
+
+        <StackPanel Grid.Row="2"
+                    Width="320"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center" Height="155">
+
+            <TextBlock Text="Email"
+                     FontSize="14"
+                     FontWeight="SemiBold"
+                     Foreground="#172554"
+                     Margin="0,0,0,8"/>
+
+            <TextBox Height="44"
+                     FontSize="14"
+                     Padding="12"
+                     Text="{Binding Email}"/>
+
+            <TextBlock Text="Password"
+                    FontSize="14"
+                    FontWeight="SemiBold"
+                    Foreground="#172554"
+                    Margin="0,13,0,8"/>
+
+            <TextBox Height="44"
+                    FontSize="14"
+                    Padding="12"
+                    Text="{Binding Password}"/>
+
+        </StackPanel>
+        <Button Grid.Row="4"
+                Width="320"
+                Height="44"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                Background="#8B7CF6"
+                Foreground="White"
+                FontSize="16"
+                FontWeight="SemiBold"
+                Content="Sign In"
+                Command="{Binding SignInCommand}"/>
     </Grid>
 </Window>
