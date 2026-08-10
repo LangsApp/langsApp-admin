@@ -1,4 +1,5 @@
-﻿using System;
+﻿using LangApp.Admin.WPF.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -19,9 +20,19 @@ namespace LangApp.Admin.WPF.Views
     /// </summary>
     public partial class LoginWindow : Window
     {
-        public LoginWindow()
+        public LoginWindow(LoginWindowViewModel viewModel)
         {
             InitializeComponent();
+            DataContext = viewModel;
+        }
+        private void PasswordInput_OnPasswordChanged(object sender, RoutedEventArgs e)
+        {
+            if (DataContext is LoginWindowViewModel viewModel &&
+                sender is PasswordBox passwordBox)
+            {
+                viewModel.LogInUser.Password =
+                    passwordBox.Password;
+            }
         }
     }
 }
