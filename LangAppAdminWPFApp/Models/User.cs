@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace LangApp.Admin.WPF.Models
 {
-    class User : INotifyPropertyChanged
+    public class User : INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler? PropertyChanged;
         public string login = string.Empty;

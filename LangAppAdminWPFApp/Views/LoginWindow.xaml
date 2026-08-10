@@ -7,9 +7,6 @@
         xmlns:vm="clr-namespace:LangApp.Admin.WPF.ViewModels"
         mc:Ignorable="d"
         Title="LoginWindow" Height="800" Width="450">
-    <Window.DataContext>
-        <vm:LoginWindowViewModel/>
-    </Window.DataContext>
     <Grid>
 
         <Grid.RowDefinitions>
@@ -70,7 +67,8 @@
             <TextBox Height="44"
                      FontSize="14"
                      Padding="12"
-                     Text="{Binding Email}"/>
+                     Text="{Binding LogInUser.Login, 
+                UpdateSourceTrigger=PropertyChanged}"/>
 
             <TextBlock Text="Password"
                     FontSize="14"
@@ -78,10 +76,12 @@
                     Foreground="#172554"
                     Margin="0,13,0,8"/>
 
-            <TextBox Height="44"
+            <PasswordBox 
+                    x:Name="PasswordInput"
+                    Height="44"
                     FontSize="14"
                     Padding="12"
-                    Text="{Binding Password}"/>
+                    PasswordChanged="PasswordInput_OnPasswordChanged"/>
 
         </StackPanel>
         <Button Grid.Row="4"
@@ -94,6 +94,6 @@
                 FontSize="16"
                 FontWeight="SemiBold"
                 Content="Sign In"
-                Command="{Binding SignInCommand}"/>
+                Command="{Binding LoginCommand}"/>
     </Grid>
 </Window>

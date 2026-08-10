@@ -4,31 +4,33 @@ using LangApp.Admin.WPF.Services;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Input;
 
 namespace LangApp.Admin.WPF.ViewModels
 {
-    class LoginWindowViewModel : INotifyPropertyChanged
+    public sealed class LoginWindowViewModel : INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler? PropertyChanged;
-        private ICommand _loginCommand;
+        private ICommand? _loginCommand;
 
         private readonly ILoginService _loginService;
+        private readonly ITokenStorage _tokenStorage;
 
-        private User _logInUser;
+        private User _logInUser = new();
 
         private CancellationTokenSource? _loginCancellationTokenSource;
 
-        public LoginWindowViewModel(ILoginService loginService, ICommand loginCommand, User loginUser)
+        public LoginWindowViewModel(
+            ILoginService loginService,
+            ITokenStorage tokenStorage)
         {
-            _loginService = loginService; 
-            _loginCommand = loginCommand;
-            _logInUser = loginUser;
+            _loginService = loginService;
+            _tokenStorage = tokenStorage;
         }
 
         public ICommand LoginCommand => _loginCommand ??= new AsyncRelayCommand(Log_In_User);
@@ -42,7 +44,13 @@ namespace LangApp.Admin.WPF.ViewModels
             {
                 try
                 {
-                   var result = await _loginService.Login(_logInUser.Login, _logInUser.Password, _loginCancellationTokenSource.Token);
+                    string token = await _loginService.Login(
+                        _logInUser.Login,
+                        _logInUser.Password,
+                        _loginCancellationTokenSource.Token);
+
+                    _tokenStorage.AccessToken = token;
+                    MessageBox.Show("Login successful");
                 }
                 catch (Exception ex)
                 {

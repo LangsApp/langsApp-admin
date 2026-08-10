@@ -1,4 +1,9 @@
-﻿using System.Configuration;
+﻿using LangApp.Admin.WPF.Services;
+using LangApp.Admin.WPF.ViewModels;
+using LangApp.Admin.WPF.Views;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using System.Configuration;
 using System.Data;
 using System.Windows;
 
@@ -9,6 +14,59 @@ namespace LangAppAdminWPFApp
     /// </summary>
     public partial class App : Application
     {
+        private readonly IHost _host;
+
+        public App()
+        {
+            HostApplicationBuilder builder =
+                Host.CreateApplicationBuilder(
+                    new HostApplicationBuilderSettings
+                    {
+                        ContentRootPath = AppContext.BaseDirectory
+                    });
+
+            string baseUrl =
+                builder.Configuration["Api:BaseUrl"]
+                ?? throw new InvalidOperationException(
+                    "Api:BaseUrl is not configured.");
+
+            builder.Services
+                .AddHttpClient<ILoginService, LoginService>(
+                    client =>
+                    {
+                        client.BaseAddress = new Uri(baseUrl);
+                        client.Timeout = TimeSpan.FromSeconds(30);
+                    });
+
+            builder.Services.AddTransient<LoginWindowViewModel>();
+            builder.Services.AddTransient<LoginWindow>();
+            builder.Services.AddSingleton<ITokenStorage, TokenStorage>();
+
+            _host = builder.Build();
+        }
+
+        protected override async void OnStartup(
+            StartupEventArgs e)
+        {
+            base.OnStartup(e);
+
+            await _host.StartAsync();
+
+            LoginWindow loginWindow =
+                _host.Services.GetRequiredService<LoginWindow>();
+
+            MainWindow = loginWindow;
+            loginWindow.Show();
+        }
+
+        protected override async void OnExit(
+            ExitEventArgs e)
+        {
+            await _host.StopAsync();
+            _host.Dispose();
+
+            base.OnExit(e);
+        }
     }
 
 }

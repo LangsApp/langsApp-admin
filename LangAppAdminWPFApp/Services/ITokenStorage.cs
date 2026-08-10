@@ -6,8 +6,10 @@ using System.Threading.Tasks;
 
 namespace LangApp.Admin.WPF.Services
 {
-    public interface ILoginService
+    public interface ITokenStorage
     {
-        public Task<string> Login(string Login, string Password, CancellationToken cancellationToken);
+        string? AccessToken { get; set; }
+
+        void Clear();
     }
 }
