@@ -5,8 +5,117 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:LangAppAdminWPFApp"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
-    <Grid>
+        Title="MainWindow" Height="550" Width="800">
+    <Window.Resources>
+        <Style x:Key="SidebarNavigationStyle"
+       TargetType="RadioButton">
 
+            <Setter Property="Height" Value="48"/>
+            <Setter Property="Margin" Value="0,0,0,8"/>
+            <Setter Property="Padding" Value="18,0"/>
+            <Setter Property="Foreground" Value="#CBD5E1"/>
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="FontSize" Value="15"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Cursor" Value="Hand"/>
+
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="RadioButton">
+
+                        <Border x:Name="ButtonBorder"
+                        Background="{TemplateBinding Background}"
+                        CornerRadius="6">
+
+                            <ContentPresenter
+                        Margin="{TemplateBinding Padding}"
+                        VerticalAlignment="Center"
+                        HorizontalAlignment="Left"/>
+
+                        </Border>
+
+                        <ControlTemplate.Triggers>
+
+                            <!-- Наведення миші -->
+                            <Trigger Property="IsMouseOver"
+                             Value="True">
+
+                                <Setter TargetName="ButtonBorder"
+                                Property="Background"
+                                Value="#263A72"/>
+
+                                <Setter Property="Foreground"
+                                Value="White"/>
+
+                            </Trigger>
+
+                            <!-- Поточна сторінка -->
+                            <Trigger Property="IsChecked"
+                             Value="True">
+
+                                <Setter TargetName="ButtonBorder"
+                                Property="Background"
+                                Value="#8B7CF6"/>
+
+                                <Setter Property="Foreground"
+                                Value="White"/>
+
+                            </Trigger>
+
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="260" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+        <Grid Grid.Column="0"
+              Background="#172554">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="100" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="70" />
+            </Grid.RowDefinitions>
+            <TextBlock Grid.Row="0"
+                       Text="LangApp Admin"
+                       Margin="24,0"
+                       VerticalAlignment="Center"
+                       FontSize="22"
+                       FontWeight="DemiBold"
+                       Foreground="White"/>
+            <StackPanel Grid.Row="1"
+                    Margin="16,20,16,0">
+
+                <RadioButton Content="Dashboard"
+             GroupName="Navigation"
+             Style="{StaticResource SidebarNavigationStyle}"/>
+
+                <RadioButton Content="Languages"
+             GroupName="Navigation"
+             IsChecked="True"
+             Style="{StaticResource SidebarNavigationStyle}"/>
+
+                <RadioButton Content="Stages"
+             GroupName="Navigation"
+             Style="{StaticResource SidebarNavigationStyle}"/>
+
+                <RadioButton Content="Words"
+             GroupName="Navigation"
+             Style="{StaticResource SidebarNavigationStyle}"/>
+
+                <RadioButton Content="Translations"
+             GroupName="Navigation"
+             Style="{StaticResource SidebarNavigationStyle}"/>
+            </StackPanel>
+            <Button Grid.Row="2"
+                    Content="Logout"
+                    Height="48"
+                    Margin="16,8,16,20"
+                    />
+        </Grid>
     </Grid>
 </Window>
