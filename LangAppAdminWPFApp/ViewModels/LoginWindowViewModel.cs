@@ -15,7 +15,6 @@ namespace LangApp.Admin.WPF.ViewModels
 {
     public sealed class LoginWindowViewModel : INotifyPropertyChanged
     {
-        public event PropertyChangedEventHandler? PropertyChanged;
         private ICommand? _loginCommand;
 
         private readonly ILoginService _loginService;
@@ -24,6 +23,11 @@ namespace LangApp.Admin.WPF.ViewModels
         private User _logInUser = new();
 
         private CancellationTokenSource? _loginCancellationTokenSource;
+
+        public event PropertyChangedEventHandler? PropertyChanged;
+
+        public event EventHandler? LoginSucceeded;
+
 
         public LoginWindowViewModel(
             ILoginService loginService,
@@ -50,7 +54,11 @@ namespace LangApp.Admin.WPF.ViewModels
                         _loginCancellationTokenSource.Token);
 
                     _tokenStorage.AccessToken = token;
-                    MessageBox.Show("Login successful");
+                    if(token != null)
+                    {
+                        LoginSucceeded?.Invoke(this, EventArgs.Empty);
+                        MessageBox.Show("Login successful");
+                    }
                 }
                 catch (Exception ex)
                 {

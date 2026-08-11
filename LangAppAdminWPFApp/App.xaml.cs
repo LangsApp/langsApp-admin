@@ -1,6 +1,8 @@
 ﻿using LangApp.Admin.WPF.Services;
 using LangApp.Admin.WPF.ViewModels;
+using LangApp.Admin.WPF.ViewModels.Pages;
 using LangApp.Admin.WPF.Views;
+using LangApp.Admin.WPF.Views.PagesViews;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System.Configuration;
@@ -40,6 +42,10 @@ namespace LangAppAdminWPFApp
 
             builder.Services.AddTransient<LoginWindowViewModel>();
             builder.Services.AddTransient<LoginWindow>();
+            builder.Services.AddTransient<MainWindowViewModel>();
+            builder.Services.AddTransient<MainWindow>();
+            builder.Services.AddTransient<LanguagePageViewModel>();
+            builder.Services.AddTransient<LanguagesPage>();
             builder.Services.AddSingleton<ITokenStorage, TokenStorage>();
 
             _host = builder.Build();

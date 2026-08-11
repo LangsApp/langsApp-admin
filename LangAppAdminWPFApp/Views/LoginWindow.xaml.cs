@@ -1,4 +1,5 @@
 ﻿using LangApp.Admin.WPF.ViewModels;
+using LangAppAdminWPFApp;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,10 +21,14 @@ namespace LangApp.Admin.WPF.Views
     /// </summary>
     public partial class LoginWindow : Window
     {
-        public LoginWindow(LoginWindowViewModel viewModel)
+        private readonly MainWindow _mainWindow;
+        public LoginWindow(LoginWindowViewModel viewModel, MainWindow mainWindow)
         {
             InitializeComponent();
             DataContext = viewModel;
+            _mainWindow = mainWindow;
+
+            viewModel.LoginSucceeded += OnLoginSucceeded;
         }
         private void PasswordInput_OnPasswordChanged(object sender, RoutedEventArgs e)
         {
@@ -33,6 +38,14 @@ namespace LangApp.Admin.WPF.Views
                 viewModel.LogInUser.Password =
                     passwordBox.Password;
             }
+        }
+
+        private void OnLoginSucceeded(object? sender, EventArgs e)
+        {
+            Application.Current.MainWindow = _mainWindow;
+
+            _mainWindow.Show();
+            Close();
         }
     }
 }

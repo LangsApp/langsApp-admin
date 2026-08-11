@@ -97,7 +97,9 @@
                 <RadioButton Content="Languages"
              GroupName="Navigation"
              IsChecked="True"
-             Style="{StaticResource SidebarNavigationStyle}"/>
+             Style="{StaticResource SidebarNavigationStyle}"
+             Command="{Binding OpenLanguagesPageCommand}"
+             CommandParameter="{Binding ElementName=MainFrame}"/>
 
                 <RadioButton Content="Stages"
              GroupName="Navigation"
@@ -117,5 +119,9 @@
                     Margin="16,8,16,20"
                     />
         </Grid>
-    </Grid>
+        <Grid Grid.Column="1">
+            <Frame x:Name="MainFrame"
+                   NavigationUIVisibility="Hidden"/>
+        </Grid>
+        </Grid>
 </Window>
