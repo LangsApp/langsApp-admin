@@ -103,15 +103,22 @@
 
                 <RadioButton Content="Stages"
              GroupName="Navigation"
-             Style="{StaticResource SidebarNavigationStyle}"/>
+             Style="{StaticResource SidebarNavigationStyle}"
+             Command="{Binding OpenStagePageCommand}"
+             CommandParameter="{Binding ElementName=MainFrame}"/>
 
                 <RadioButton Content="Words"
              GroupName="Navigation"
-             Style="{StaticResource SidebarNavigationStyle}"/>
+             Style="{StaticResource SidebarNavigationStyle}"
+             Command="{Binding OpenWordsPageCommand}"
+             CommandParameter="{Binding ElementName=MainFrame}"/>
 
                 <RadioButton Content="Translations"
              GroupName="Navigation"
-             Style="{StaticResource SidebarNavigationStyle}"/>
+             Style="{StaticResource SidebarNavigationStyle}"
+             Command="{Binding OpenTranslationsPageCommand}"
+             CommandParameter="{Binding ElementName=MainFrame}"/>
+                
             </StackPanel>
             <Button Grid.Row="2"
                     Content="Logout"
