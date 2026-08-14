@@ -54,6 +54,7 @@ namespace LangAppAdminWPFApp
             builder.Services.AddTransient<TranslationsPageViewModel>();
             builder.Services.AddTransient<TranslationsPage>();
 
+            builder.Services.AddSingleton<IAppNavigationService, AppNavigationService>();
             builder.Services.AddSingleton<ITokenStorage, TokenStorage>();
 
             _host = builder.Build();

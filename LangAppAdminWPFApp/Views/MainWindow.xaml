@@ -98,26 +98,22 @@
              GroupName="Navigation"
              IsChecked="True"
              Style="{StaticResource SidebarNavigationStyle}"
-             Command="{Binding OpenLanguagesPageCommand}"
-             CommandParameter="{Binding ElementName=MainFrame}"/>
+             Command="{Binding OpenLanguagesPageCommand}"/>
 
                 <RadioButton Content="Stages"
              GroupName="Navigation"
              Style="{StaticResource SidebarNavigationStyle}"
-             Command="{Binding OpenStagePageCommand}"
-             CommandParameter="{Binding ElementName=MainFrame}"/>
+             Command="{Binding OpenStagePageCommand}"/>
 
                 <RadioButton Content="Words"
              GroupName="Navigation"
              Style="{StaticResource SidebarNavigationStyle}"
-             Command="{Binding OpenWordsPageCommand}"
-             CommandParameter="{Binding ElementName=MainFrame}"/>
+             Command="{Binding OpenWordsPageCommand}"/>
 
                 <RadioButton Content="Translations"
              GroupName="Navigation"
              Style="{StaticResource SidebarNavigationStyle}"
-             Command="{Binding OpenTranslationsPageCommand}"
-             CommandParameter="{Binding ElementName=MainFrame}"/>
+             Command="{Binding OpenTranslationsPageCommand}"/>
                 
             </StackPanel>
             <Button Grid.Row="2"

@@ -1,4 +1,5 @@
-﻿using LangApp.Admin.WPF.ViewModels;
+﻿using LangApp.Admin.WPF.Services;
+using LangApp.Admin.WPF.ViewModels;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
@@ -17,10 +18,11 @@ namespace LangAppAdminWPFApp
     /// </summary>
     public partial class MainWindow : Window
     {
-        public MainWindow(MainWindowViewModel mainWindowViewModel)
+        public MainWindow(MainWindowViewModel mainWindowViewModel, IAppNavigationService navigationService)
         {
             InitializeComponent();
             DataContext = mainWindowViewModel;
+            navigationService.Initialize(MainFrame);
         }
     }
 }
