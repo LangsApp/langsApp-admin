@@ -8,19 +8,195 @@
       d:DesignHeight="450" d:DesignWidth="800"
       Title="LanguagesPage"
       Background="White">
-    
+    <Page.Resources>
 
-    <Grid>
+        <Style x:Key="PrimaryButtonStyle"
+               TargetType="Button">
+            <Setter Property="Height" Value="42"/>
+            <Setter Property="Padding" Value="20,0"/>
+            <Setter Property="Background" Value="#8B7CF6"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Cursor" Value="Hand"/>
+        </Style>
+
+        <Style x:Key="InputStyle"
+               TargetType="TextBox">
+            <Setter Property="Height" Value="40"/>
+            <Setter Property="Padding" Value="10,7"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="BorderBrush" Value="#CBD5E1"/>
+        </Style>
+
+        <Style x:Key="CenteredCellStyle"
+       TargetType="TextBlock">
+            <Setter Property="HorizontalAlignment"
+            Value="Center"/>
+        </Style>
+
+        <Style x:Key="CenteredHeaderStyle"
+       TargetType="DataGridColumnHeader">
+            <Setter Property="HorizontalContentAlignment"
+            Value="Center"/>
+        </Style>
+
+    </Page.Resources>
+
+    <Grid Margin="32">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
+            <RowDefinition Height="24"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
-        <TextBlock Grid.Row="0"
-                   Text="Languages"
-                   FontSize="24"
-                   FontWeight="Bold"
-                   Margin="10"/>
+        <Grid Grid.Row="0">
+
+            <StackPanel>
+                <TextBlock Text="Languages"
+                           FontSize="30"
+                           FontWeight="Bold"
+                           Foreground="#172554"/>
+
+                <TextBlock Text="Manage supported languages"
+                           Margin="0,6,0,0"
+                           FontSize="16"
+                           Foreground="#64748B"/>
+            </StackPanel>
+            
+            <Button Content="+  Add language"
+                    HorizontalAlignment="Right"
+                    VerticalAlignment="Center"
+                    Style="{StaticResource PrimaryButtonStyle}"
+                    Command="{Binding OpenAddLanguageCommand}"/>
+        </Grid>
+
+        <Border Grid.Row="2"
+                Padding="20"
+                Background="White"
+                BorderBrush="#E2E8F0"
+                BorderThickness="1"
+                CornerRadius="8">
+
+            <Grid>
+                
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="20"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                
+                <Label Grid.Row="0" 
+                       Content="Search"
+                       HorizontalAlignment="Left"
+                       VerticalAlignment="Center"/>
+                
+                <TextBox Grid.Row="1"
+                         Width="320"
+                         HorizontalAlignment="Left"
+                         Style="{StaticResource InputStyle}"
+                         Text="{Binding SearchText,
+                                        UpdateSourceTrigger=PropertyChanged}"/>
+
+                <DataGrid Grid.Row="3"
+                          ItemsSource="{Binding Languages}"
+                          AutoGenerateColumns="False"
+                          IsReadOnly="True"
+                          CanUserAddRows="False"
+                          GridLinesVisibility="Horizontal"
+                          BorderBrush="#E2E8F0"
+                          RowHeight="52"
+                          HeadersVisibility="Column"
+                          Margin="0,0,0,16">
+
+                    <DataGrid.Columns>
+
+                        <DataGridTextColumn Header="Code"
+                                            Binding="{Binding LangCode}"
+                                            Width="130"/>
+
+                        <DataGridTextColumn Header="Language"
+                                            Binding="{Binding Name}"
+                                            Width="*"
+                                            ElementStyle="{StaticResource CenteredCellStyle}"
+                                            HeaderStyle="{StaticResource CenteredHeaderStyle}"/>
+
+                        <DataGridTemplateColumn Header="Actions"
+                                                Width="130">
+
+                            <DataGridTemplateColumn.CellTemplate>
+                                
+                                <DataTemplate>
+                                    
+                                    <StackPanel Orientation="Horizontal">
+                                        
+                                        <Button Content="Edit"
+                                                Padding="10,4"
+                                                Margin="0,0,8,0"
+                                                Command="{Binding DataContext.EditLanguageCommand, 
+                                            RelativeSource={RelativeSource AncestorType=Page}}"
+                                                CommandParameter="{Binding}"/>
+                                        
+                                        <Button Content="Delete"
+                                                Padding="10,4"
+                                                Foreground="#DC2626"
+                                                Command="{Binding DataContext.DeleteLanguageCommand,
+                                            RelativeSource={RelativeSource AncestorType=Page}}"
+                                                CommandParameter="{Binding}"/>
+                                        
+                                    </StackPanel>
+                                    
+                                </DataTemplate>
+                                
+                            </DataGridTemplateColumn.CellTemplate>
+                            
+                        </DataGridTemplateColumn>
+
+                    </DataGrid.Columns>
+                    
+                </DataGrid>
+                <Grid Grid.Row="4">
+                    
+                    <TextBlock Text="{Binding PageInfo}"
+                               VerticalAlignment="Center"
+                               Foreground="#64748B"/>
+
+                    <StackPanel Orientation="Horizontal"
+                                HorizontalAlignment="Center">
+                        <Button Content="&lt;"
+                                Width="38"
+                                Margin="0,0,8,0"
+                                Command="{Binding PreviousPageCommand}"
+                                Background="White"
+                                BorderBrush="White"/>
+
+                        <Border Width="38"
+                                Height="34"
+                                Background="#8B7CF6"
+                                CornerRadius="4">
+
+                            <TextBlock Text="{Binding CurrentPage}"
+                                       HorizontalAlignment="Center"
+                                       VerticalAlignment="Center"
+                                       Foreground="White"
+                                       FontWeight="SemiBold"/>
+                        </Border>
+
+                        <Button Content="&gt;"
+                                Width="38"
+                                Height="34"
+                                Margin="8,0,0,0"
+                                Command="{Binding NextPageCommand}"
+                                Background="White"
+                                BorderBrush="White"/>
+
+                    </StackPanel>
+                    
+                </Grid>
+            </Grid>
+        </Border>
 
     </Grid>
 </Page>
