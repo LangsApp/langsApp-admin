@@ -26,5 +26,13 @@ namespace LangApp.Admin.WPF.Views.PagesViews
             InitializeComponent();
             DataContext = languagesPageViewModel;
         }
+
+        private async void LanguagePage_Loaded(object sender, RoutedEventArgs e)
+        {
+            if (DataContext is LanguagePageViewModel viewModel)
+            {
+                await viewModel.LoadLanguageAsync();
+            }
+        }
     }
 }

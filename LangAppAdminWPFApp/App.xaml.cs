@@ -8,6 +8,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System.Configuration;
 using System.Data;
+using System.Net.Http;
 using System.Windows;
 
 namespace LangAppAdminWPFApp
@@ -33,13 +34,19 @@ namespace LangAppAdminWPFApp
                 ?? throw new InvalidOperationException(
                     "Api:BaseUrl is not configured.");
 
-            builder.Services
-                .AddHttpClient<ILoginService, LoginService>(
-                    client =>
-                    {
-                        client.BaseAddress = new Uri(baseUrl);
-                        client.Timeout = TimeSpan.FromSeconds(30);
-                    });
+            void ConfigureHttpClient(HttpClient client)
+            {
+                client.BaseAddress = new Uri(baseUrl);
+                client.Timeout = TimeSpan.FromSeconds(30);
+            }
+
+            //builder.Services
+            //    .AddHttpClient<ILoginService, LoginService>(
+            //        client =>
+            //        {
+            //            client.BaseAddress = new Uri(baseUrl);
+            //            client.Timeout = TimeSpan.FromSeconds(30);
+            //        });
 
             builder.Services.AddTransient<LoginWindowViewModel>();
             builder.Services.AddTransient<LoginWindow>();
@@ -56,6 +63,9 @@ namespace LangAppAdminWPFApp
 
             builder.Services.AddSingleton<IAppNavigationService, AppNavigationService>();
             builder.Services.AddSingleton<ITokenStorage, TokenStorage>();
+
+            builder.Services.AddHttpClient<ILoginService, LoginService>(ConfigureHttpClient);
+            builder.Services.AddHttpClient<ILanguageService, LanguageService>(ConfigureHttpClient);
 
             _host = builder.Build();
         }
