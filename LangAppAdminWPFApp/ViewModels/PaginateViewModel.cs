@@ -8,9 +8,9 @@ namespace LangApp.Admin.WPF.ViewModels
 {
     public class PaginateViewModel
     {
-        public int PaginateNumber { get; set; }
+        public int PaginateNumber { get; set; } // number of current page
 
-        public int TotalPaginate { get; set; }
+        public int TotalPaginate { get; set; } // total pages count
 
         public PaginateViewModel(int objectCount, int paginateNumber, int paginateSize)
         {
