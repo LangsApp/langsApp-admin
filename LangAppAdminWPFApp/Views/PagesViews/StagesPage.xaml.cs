@@ -26,5 +26,13 @@ namespace LangApp.Admin.WPF.Views.PagesViews
             InitializeComponent();
             DataContext = stagePageViewModel;
         }
+
+        private async void StagesPage_Loaded(object sender, RoutedEventArgs e)
+        {
+            if (DataContext is StagePageViewModel viewModel)
+            {
+                await viewModel.LoadStagesAsync();
+            }
+        }
     }
 }

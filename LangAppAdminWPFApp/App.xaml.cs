@@ -1,4 +1,5 @@
 ﻿using LangApp.Admin.WPF.Services;
+using LangApp.Admin.WPF.Services.Interfaces;
 using LangApp.Admin.WPF.ViewModels;
 using LangApp.Admin.WPF.ViewModels.PagesViewModels;
 using LangApp.Admin.WPF.Views;
@@ -65,6 +66,7 @@ namespace LangAppAdminWPFApp
 
             builder.Services.AddHttpClient<ILoginService, LoginService>(ConfigureHttpClient);
             builder.Services.AddHttpClient<ILanguageService, LanguageService>(ConfigureHttpClient);
+            builder.Services.AddHttpClient<IStageService,  StageService>(ConfigureHttpClient);
 
             _host = builder.Build();
         }

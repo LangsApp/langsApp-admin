@@ -20,7 +20,7 @@ namespace LangApp.Admin.WPF.Models
             private set; 
         }
 
-        public string Name
+        public string StageName
         {
             get => name;
             set

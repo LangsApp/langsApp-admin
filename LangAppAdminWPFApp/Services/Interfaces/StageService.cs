@@ -20,7 +20,7 @@ namespace LangApp.Admin.WPF.Services.Interfaces
 
         public async Task<List<Stage>> GetStagesAsync(CancellationToken cancellationToken)
         {
-            return await _client.GetFromJsonAsync<List<Stage>>("", cancellationToken) ?? [];
+            return await _client.GetFromJsonAsync<List<Stage>>("api/Stage/get-stages", cancellationToken) ?? [];
         }
     }
 }
