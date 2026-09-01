@@ -26,5 +26,13 @@ namespace LangApp.Admin.WPF.Views.PagesViews
             InitializeComponent();
             DataContext = translationsPageViewModel;
         }
+
+        private async void TranslationsPage_Loaded(object sender, RoutedEventArgs e)
+        {
+            if (DataContext is TranslationsPageViewModel viewModel)
+            {
+                await viewModel.LoadTranslatesAsync();
+            }
+        }
     }
 }

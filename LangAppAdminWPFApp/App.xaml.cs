@@ -68,6 +68,7 @@ namespace LangAppAdminWPFApp
             builder.Services.AddHttpClient<ILanguageService, LanguageService>(ConfigureHttpClient);
             builder.Services.AddHttpClient<IStageService,  StageService>(ConfigureHttpClient);
             builder.Services.AddHttpClient<IWordsService,  WordsService>(ConfigureHttpClient);
+            builder.Services.AddHttpClient<ITranslatesService, TranslatesService>(ConfigureHttpClient);
 
             _host = builder.Build();
         }
