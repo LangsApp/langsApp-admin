@@ -26,5 +26,13 @@ namespace LangApp.Admin.WPF.Views.PagesViews
             InitializeComponent();
             DataContext = wordsPageViewModel;
         }
+
+        private async void WordsPage_Loaded(object sender, RoutedEventArgs e)
+        {
+            if (DataContext is WordsPageViewModel viewModel)
+            {
+                await viewModel.LoadWordsAsync();
+            }
+        }
     }
 }
