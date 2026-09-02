@@ -19,9 +19,9 @@ namespace LangApp.Admin.WPF.Views.PagesViews
     /// <summary>
     /// Interaction logic for Categories.xaml
     /// </summary>
-    public partial class Categories : Page
+    public partial class CategoriesPage : Page
     {
-        public Categories(CategoriesPageViewModel categoriesPageViewModel)
+        public CategoriesPage(CategoriesPageViewModel categoriesPageViewModel)
         {
             InitializeComponent();
             DataContext = categoriesPageViewModel;

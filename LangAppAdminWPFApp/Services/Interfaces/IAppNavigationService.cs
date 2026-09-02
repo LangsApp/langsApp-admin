@@ -14,5 +14,6 @@ namespace LangApp.Admin.WPF.Services
         void NavigateToStagesPage();
         void NavigateToWordsPage();
         void NavigateToTranslationsPage();
+        void NavigateToCategoriesPage();
     }
 }

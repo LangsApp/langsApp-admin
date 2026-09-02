@@ -60,6 +60,8 @@ namespace LangAppAdminWPFApp
             builder.Services.AddTransient<WordsPage>();
             builder.Services.AddTransient<TranslationsPageViewModel>();
             builder.Services.AddTransient<TranslationsPage>();
+            builder.Services.AddTransient<CategoriesPage>();
+            builder.Services.AddTransient<CategoriesPageViewModel>();
 
             builder.Services.AddSingleton<IAppNavigationService, AppNavigationService>();
             builder.Services.AddSingleton<ITokenStorage, TokenStorage>();
@@ -69,6 +71,7 @@ namespace LangAppAdminWPFApp
             builder.Services.AddHttpClient<IStageService,  StageService>(ConfigureHttpClient);
             builder.Services.AddHttpClient<IWordsService,  WordsService>(ConfigureHttpClient);
             builder.Services.AddHttpClient<ITranslatesService, TranslatesService>(ConfigureHttpClient);
+            builder.Services.AddHttpClient<ICategoryService, CategoryService>(ConfigureHttpClient);
 
             _host = builder.Build();
         }

@@ -21,6 +21,7 @@ namespace LangApp.Admin.WPF.ViewModels
         private ICommand? _openStagePageCommand;
         private ICommand? _openWordsPageCommand;
         private ICommand? _openTranslationsPageCommand;
+        private ICommand? _openCategoriesPageCommand;
 
         private readonly IAppNavigationService _navigationService;
 
@@ -34,6 +35,7 @@ namespace LangApp.Admin.WPF.ViewModels
         public ICommand OpenStagePageCommand => _openStagePageCommand ??= new RelayCommand(OpenStagePage);
         public ICommand OpenWordsPageCommand => _openWordsPageCommand ??= new RelayCommand(OpenWordsPage);
         public ICommand OpenTranslationsPageCommand => _openTranslationsPageCommand ??= new RelayCommand(OpenTranslationsPage);
+        public ICommand OpenCategoriesPageCommand => _openCategoriesPageCommand ??= new RelayCommand(OpenCategoriesPage);
 
         public void OpenLanguagesPage(object? _)
         {
@@ -53,6 +55,11 @@ namespace LangApp.Admin.WPF.ViewModels
         public void OpenTranslationsPage(object? _)
         {
             _navigationService.NavigateToTranslationsPage();
+        }
+
+        public void OpenCategoriesPage(object? _)
+        {
+            _navigationService.NavigateToCategoriesPage();
         }
 
         private void NotifyPropertyChanged([CallerMemberName] string? name = null)

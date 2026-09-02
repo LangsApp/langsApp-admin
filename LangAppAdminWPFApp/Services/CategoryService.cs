@@ -21,7 +21,7 @@ namespace LangApp.Admin.WPF.Services
 
         public async Task<List<Category>> GetCategoriesAsync(CancellationToken cancellationToken)
         {
-            return await _client.GetFromJsonAsync<List<Category>>("", cancellationToken) ?? [];
+            return await _client.GetFromJsonAsync<List<Category>>("api/Category/get-categories", cancellationToken) ?? [];
         }
     }
 }

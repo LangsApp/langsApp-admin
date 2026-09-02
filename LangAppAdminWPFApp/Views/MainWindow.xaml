@@ -114,7 +114,12 @@
              GroupName="Navigation"
              Style="{StaticResource SidebarNavigationStyle}"
              Command="{Binding OpenTranslationsPageCommand}"/>
-                
+
+                <RadioButton Content="Categories"
+                             GroupName="Navigation"
+                             Style="{StaticResource SidebarNavigationStyle}"
+                             Command="{Binding OpenCategoriesPageCommand}"/>
+
             </StackPanel>
             <Button Grid.Row="2"
                     Content="Logout"

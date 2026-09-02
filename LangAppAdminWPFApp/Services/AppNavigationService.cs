@@ -14,18 +14,21 @@ namespace LangApp.Admin.WPF.Services
         private readonly StagesPage _stagesPage;
         private readonly WordsPage _wordsPage;
         private readonly TranslationsPage _translationsPage;
+        private readonly CategoriesPage _categoriesPage;
         private Frame? _frame;
 
         public AppNavigationService(
             LanguagesPage languagesPage, 
             StagesPage stagesPage, 
             WordsPage wordsPage, 
-            TranslationsPage translationsPage)
+            TranslationsPage translationsPage,
+            CategoriesPage categoriesPage)
         {
             _languagesPage = languagesPage;
             _stagesPage = stagesPage;
             _wordsPage = wordsPage;
             _translationsPage = translationsPage;
+            _categoriesPage = categoriesPage;
         }
         public void Initialize(Frame frame)
         {
@@ -49,6 +52,11 @@ namespace LangApp.Admin.WPF.Services
         public void NavigateToWordsPage()
         {
             _frame?.Navigate(_wordsPage);
+        }
+
+        public void NavigateToCategoriesPage()
+        {
+            _frame?.Navigate(_categoriesPage);
         }
     }
 }
