@@ -49,7 +49,7 @@ namespace LangApp.Admin.WPF.Models
             }
         }
 
-        public string NormalizedTranslatedText
+        public string NormalizedTranslatedWord
         {
             get => normalizedTranslatedText;
             set
@@ -62,7 +62,7 @@ namespace LangApp.Admin.WPF.Models
             }
         }
 
-        public string DisplayTranslatedText
+        public string DisplayTranslatedWord
         {
             get => displayTranslatedText;
             set

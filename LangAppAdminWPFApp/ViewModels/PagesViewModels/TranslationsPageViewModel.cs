@@ -50,7 +50,7 @@ namespace LangApp.Admin.WPF.ViewModels.PagesViewModels
         public ICommand PreviousPageCommand { get; }
         public ICommand NextPageCommand { get; }
 
-        public async Task LoadLanguageAsync()
+        public async Task LoadTranslatesAsync()
         {
             _loadCancellationTokenSource?.Cancel();
             _loadCancellationTokenSource?.Dispose();

@@ -21,7 +21,8 @@ namespace LangApp.Admin.WPF.Services
 
         public async Task<List<Translate>> GetTranslatesAsync(CancellationToken cancellationToken)
         {
-            return await _client.GetFromJsonAsync<List<Translate>>("", cancellationToken) ?? [];
+            return await _client.GetFromJsonAsync<List<Translate>>("api/Translates/get-all-translations", 
+                cancellationToken) ?? [];
         }
     }
 }

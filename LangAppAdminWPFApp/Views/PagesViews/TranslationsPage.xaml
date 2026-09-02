@@ -99,7 +99,7 @@
                                 UpdateSourceTrigger=PropertyChanged}"/>
 
                 <DataGrid Grid.Row="3"
-                          ItemsSource="{Binding Translations}"
+                          ItemsSource="{Binding Translates}"
                           AutoGenerateColumns="False"
                           IsReadOnly="True"
                           CanUserAddRows="False"
@@ -115,15 +115,15 @@
                                             Width="130"/>
 
                         <DataGridTextColumn Header="Translate to"
-                                            Binding="{Binding LangCode}"
+                                            Binding="{Binding TranslateTo}"
                                             Width="80"/>
 
                         <DataGridTextColumn Header="Normalized translated word"
-                                            Binding="{Binding NormalizedBaseWord}"
+                                            Binding="{Binding NormalizedTranslatedWord}"
                                             Width="*"/>
 
                         <DataGridTextColumn Header="Display translated word"
-                                            Binding="{Binding DisplayBaseWord}"
+                                            Binding="{Binding DisplayTranslatedWord}"
                                             Width="*"/>
 
                         <DataGridTemplateColumn Header="Actions"
