@@ -13,24 +13,24 @@ public class LanguagePageViewModel : INotifyPropertyChanged
     private CancellationTokenSource? _loadCancellationTokenSource;
     private const int PageSize = 5;
     private List<Language> _allLanguages = [];
-    private PaginateViewModel<Language> _paginateViewModel = new(0, 1, PageSize);
+    private PaginateViewModel<Language> _pagenateViewModel = new(0, 1, PageSize);
 
-    public int CurrentPage => _paginateViewModel.PaginateNumber;
+    public int CurrentPage => _pagenateViewModel.PaginateNumber;
     public event PropertyChangedEventHandler? PropertyChanged;
-    public ObservableCollection<Language> Languages => _paginateViewModel.PageCollection;
+    public ObservableCollection<Language> Languages => _pagenateViewModel.PageCollection;
     public LanguagePageViewModel(ILanguageService languageService)
     {
-        _paginateViewModel.PageChanged += OnPageChanged;
+        _pagenateViewModel.PageChanged += OnPageChanged;
 
         _languageService = languageService;
 
         PreviousPageCommand = new RelayCommand(
-            _ => _paginateViewModel.ShowPage(CurrentPage - 1),
-            _ => _paginateViewModel.HasPreviousPage);
+            _ => _pagenateViewModel.ShowPage(CurrentPage - 1),
+            _ => _pagenateViewModel.HasPreviousPage);
 
         NextPageCommand = new RelayCommand(
-            _ => _paginateViewModel.ShowPage(CurrentPage + 1),
-            _ => _paginateViewModel.HasNextPage);
+            _ => _pagenateViewModel.ShowPage(CurrentPage + 1),
+            _ => _pagenateViewModel.HasNextPage);
     }
 
 
@@ -38,7 +38,7 @@ public class LanguagePageViewModel : INotifyPropertyChanged
     {
         get
         {
-            return _paginateViewModel.PageInfo("languages");
+            return _pagenateViewModel.PageInfo("languages");
         }
     }
     public ICommand PreviousPageCommand { get; }
@@ -52,8 +52,8 @@ public class LanguagePageViewModel : INotifyPropertyChanged
 
         _allLanguages = await _languageService.GetLanguagesAsync(_loadCancellationTokenSource.Token);
 
-        _paginateViewModel.GetCollection(_allLanguages);
-        _paginateViewModel.ShowPage(1);
+        _pagenateViewModel.GetCollection(_allLanguages);
+        _pagenateViewModel.ShowPage(1);
         
         //ShowPage(1);
     }
