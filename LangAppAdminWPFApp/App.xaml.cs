@@ -1,9 +1,10 @@
 ﻿using LangApp.Admin.WPF.Services;
 using LangApp.Admin.WPF.Services.Interfaces;
-using LangApp.Admin.WPF.ViewModels;
 using LangApp.Admin.WPF.ViewModels.PagesViewModels;
+using LangApp.Admin.WPF.ViewModels.WindowsViewModels;
 using LangApp.Admin.WPF.Views;
 using LangApp.Admin.WPF.Views.PagesViews;
+using LangApp.Admin.WPF.Views.Windows;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System.Configuration;
@@ -62,9 +63,15 @@ namespace LangAppAdminWPFApp
             builder.Services.AddTransient<TranslationsPage>();
             builder.Services.AddTransient<CategoriesPage>();
             builder.Services.AddTransient<CategoriesPageViewModel>();
+            builder.Services.AddTransient<AddCategoryWindow>();
+            builder.Services.AddTransient<AddCategoryWindowViewModel>();
+
+
 
             builder.Services.AddSingleton<IAppNavigationService, AppNavigationService>();
             builder.Services.AddSingleton<ITokenStorage, TokenStorage>();
+            builder.Services.AddSingleton<IDialogService, DialogService>();
+            builder.Services.AddSingleton<IWindowFactory, WindowFactory>();
 
             builder.Services.AddHttpClient<ILoginService, LoginService>(ConfigureHttpClient);
             builder.Services.AddHttpClient<ILanguageService, LanguageService>(ConfigureHttpClient);

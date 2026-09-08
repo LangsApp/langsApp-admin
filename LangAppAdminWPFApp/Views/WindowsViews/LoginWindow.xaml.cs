@@ -1,4 +1,4 @@
-﻿using LangApp.Admin.WPF.ViewModels;
+﻿using LangApp.Admin.WPF.ViewModels.WindowsViewModels;
 using LangAppAdminWPFApp;
 using System;
 using System.Collections.Generic;

@@ -1,5 +1,5 @@
 ﻿using LangApp.Admin.WPF.Views.PagesViews;
-using System;
+using LangApp.Admin.WPF.Views.Windows;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;

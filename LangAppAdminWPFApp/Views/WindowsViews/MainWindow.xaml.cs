@@ -1,5 +1,5 @@
 ﻿using LangApp.Admin.WPF.Services;
-using LangApp.Admin.WPF.ViewModels;
+using LangApp.Admin.WPF.ViewModels.WindowsViewModels;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;

@@ -11,7 +11,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 
-namespace LangApp.Admin.WPF.ViewModels
+namespace LangApp.Admin.WPF.ViewModels.WindowsViewModels
 {
     public sealed class LoginWindowViewModel : INotifyPropertyChanged
     {

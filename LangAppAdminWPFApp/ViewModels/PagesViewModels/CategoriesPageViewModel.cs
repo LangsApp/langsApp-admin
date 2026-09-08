@@ -1,5 +1,6 @@
 ﻿using LangApp.Admin.WPF.Infrastructure;
 using LangApp.Admin.WPF.Models;
+using LangApp.Admin.WPF.Services;
 using LangApp.Admin.WPF.Services.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -16,20 +17,23 @@ namespace LangApp.Admin.WPF.ViewModels.PagesViewModels
     public class CategoriesPageViewModel : INotifyPropertyChanged
     {
         private readonly ICategoryService _categoryService;
+        private readonly IDialogService _dialogService;
         private CancellationTokenSource? _loadCancellationTokenSource;
         private const int PageSize = 5;
         private List<Category> _allCategories = [];
         private PaginateViewModel<Category> _pagenateViewModel = new(0, 1, PageSize);
+        private ICommand? _openAddCategoryCommand;
 
         public int CurrentPage => _pagenateViewModel.PaginateNumber;
         public event PropertyChangedEventHandler? PropertyChanged;
         public ObservableCollection<Category> Categories => _pagenateViewModel.PageCollection;
 
-        public CategoriesPageViewModel(ICategoryService categoryService)
+        public CategoriesPageViewModel(ICategoryService categoryService, IDialogService dialogService)
         {
             _pagenateViewModel.PageChanged += OnPageChanged;
 
             _categoryService = categoryService;
+            _dialogService = dialogService;
 
             PreviousPageCommand = new RelayCommand(
             _ => _pagenateViewModel.ShowPage(CurrentPage - 1),
@@ -40,6 +44,8 @@ namespace LangApp.Admin.WPF.ViewModels.PagesViewModels
                 _ => _pagenateViewModel.HasNextPage);
         }
 
+        public ICommand OpenAddCategoryCommand => _openAddCategoryCommand ??= new RelayCommand(OpenAddCategoryWindow);
+
         public string PageInfo
         {
             get
@@ -49,6 +55,7 @@ namespace LangApp.Admin.WPF.ViewModels.PagesViewModels
         }
         public ICommand PreviousPageCommand { get; }
         public ICommand NextPageCommand { get; }
+        
 
         public async Task LoadCategoriesAsync()
         {
@@ -62,6 +69,11 @@ namespace LangApp.Admin.WPF.ViewModels.PagesViewModels
             _pagenateViewModel.ShowPage(1);
 
             //ShowPage(1);
+        }
+
+        public void OpenAddCategoryWindow(object? _)
+        {
+            _dialogService.OpenAddCategoryDialog();
         }
 
         private void OnPageChanged(object? sender, EventArgs e)
