@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace LangApp.Admin.WPF.Services
 {
-    public class CategoryService :ICategoryService
+    public class CategoryService : ICategoryService
     {
         private readonly HttpClient _client;
 
@@ -22,6 +22,29 @@ namespace LangApp.Admin.WPF.Services
         public async Task<List<Category>> GetCategoriesAsync(CancellationToken cancellationToken)
         {
             return await _client.GetFromJsonAsync<List<Category>>("api/Category/get-categories", cancellationToken) ?? [];
+        }
+
+        public async Task<string> AddNewCategoryAsync(string newCategory, CancellationToken cancellationToken)
+        {
+            try
+            {
+                var response = await _client.PostAsJsonAsync("", newCategory, cancellationToken);
+                if (response.IsSuccessStatusCode)
+                {
+                    var result = await response.Content.ReadAsStringAsync(cancellationToken: cancellationToken);
+
+                    return result ?? throw new Exception("Category want added");
+                }
+                else
+                {
+                    var errorMessage = await response.Content.ReadAsStringAsync(cancellationToken);
+                    throw new Exception($"Add category failed: {response.StatusCode} - {errorMessage}");
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Add category failed: {ex.Message}");
+            }
         }
     }
 }

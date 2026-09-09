@@ -10,5 +10,7 @@ namespace LangApp.Admin.WPF.Services.Interfaces
     public interface ICategoryService
     {
         public Task<List<Category>> GetCategoriesAsync(CancellationToken cancellationToken);
+
+        public Task<string> AddNewCategoryAsync(string newCategory, CancellationToken cancellationToken);
     }
 }
