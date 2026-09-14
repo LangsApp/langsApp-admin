@@ -1,4 +1,5 @@
-﻿using LangApp.Admin.WPF.Models;
+﻿using LangApp.Admin.WPF.DTOs.Requests;
+using LangApp.Admin.WPF.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,5 +11,6 @@ namespace LangApp.Admin.WPF.Services
     public interface ILanguageService
     {
         public Task<List<Language>> GetLanguagesAsync(CancellationToken cancellationToken);
+        public Task<string> AddNewLanguageAsync(CreateLanguageDTO newLanguage, CancellationToken token);
     }
 }

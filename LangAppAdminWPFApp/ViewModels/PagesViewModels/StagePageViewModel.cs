@@ -16,19 +16,22 @@ namespace LangApp.Admin.WPF.ViewModels.PagesViewModels
     public class StagePageViewModel : INotifyPropertyChanged
     {
         private readonly IStageService _stageService;
+        private readonly IDialogService _dialogService;
         private CancellationTokenSource? _loadCancellationTokenSource;
         private const int PageSize = 5;
         private List<Stage> _allStages = [];
         private PaginateViewModel<Stage> _paginateViewModel = new(0, 1, PageSize);
+        private ICommand? _openAddStageCommand;
 
         public int CurrentPage => _paginateViewModel.PaginateNumber;
         public event PropertyChangedEventHandler? PropertyChanged;
         public ObservableCollection<Stage> Stages => _paginateViewModel.PageCollection;
 
-        public StagePageViewModel(IStageService stageService)
+        public StagePageViewModel(IStageService stageService, IDialogService dialogService)
         {
             _paginateViewModel.PageChanged += OnPageChanged;
             _stageService = stageService;
+            _dialogService = dialogService;
 
             PreviousPageCommand = new RelayCommand(
                 _ => _paginateViewModel.ShowPage(CurrentPage - 1),
@@ -49,7 +52,7 @@ namespace LangApp.Admin.WPF.ViewModels.PagesViewModels
 
         public ICommand PreviousPageCommand { get; }
         public ICommand NextPageCommand { get; }
-
+        public ICommand OpenAddStageCommand => _openAddStageCommand ??= new RelayCommand(OpenAddStageWindow);
 
         public async Task LoadStagesAsync()
         {
@@ -61,6 +64,11 @@ namespace LangApp.Admin.WPF.ViewModels.PagesViewModels
 
             _paginateViewModel.GetCollection(_allStages);
             _paginateViewModel.ShowPage(1);
+        }
+
+        public void OpenAddStageWindow(object? _)
+        {
+            _dialogService.OpenAddStageDialog();
         }
 
         private void OnPageChanged(object? sender, EventArgs e)

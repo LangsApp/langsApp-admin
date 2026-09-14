@@ -22,5 +22,21 @@ namespace LangApp.Admin.WPF.Services
             AddCategoryWindow window = _windowFactory.Create<AddCategoryWindow>();
             window.ShowDialog();
         }
+
+        public void OpenAddLanguageDialog()
+        {
+            AddLanguageWindow window = _windowFactory.Create<AddLanguageWindow>();
+            window.ShowDialog();
+        }
+        public void OpenAddStageDialog()
+        {
+            AddStageWindow window = _windowFactory.Create<AddStageWindow>();
+            window.ShowDialog();
+        }
+        public void OpenAddTranslateDialog()
+        {
+            AddTranslateWindow window = _windowFactory.Create<AddTranslateWindow>();
+            window.ShowDialog();
+        }
     }
 }

@@ -16,20 +16,23 @@ namespace LangApp.Admin.WPF.ViewModels.PagesViewModels
     public class TranslationsPageViewModel : INotifyPropertyChanged
     {
         private readonly ITranslatesService _translatesService;
+        private readonly IDialogService _dialogService;
         private CancellationTokenSource? _loadCancellationTokenSource;
         private const int PageSize = 5;
         private List<Translate> _allTranslates = [];
         private PaginateViewModel<Translate> _paginateViewModel = new(0, 1, PageSize);
+        private ICommand? _openAddTranslateCommand;
 
         public int CurrentPage => _paginateViewModel.PaginateNumber;
         public event PropertyChangedEventHandler? PropertyChanged;
         public ObservableCollection<Translate> Translates => _paginateViewModel.PageCollection;
 
-        public TranslationsPageViewModel(ITranslatesService translatesService)
+        public TranslationsPageViewModel(ITranslatesService translatesService, IDialogService dialogService)
         {
             _paginateViewModel.PageChanged += OnPageChanged;
 
             _translatesService = translatesService;
+            _dialogService = dialogService;
 
             PreviousPageCommand = new RelayCommand(
             _ => _paginateViewModel.ShowPage(CurrentPage - 1),
@@ -39,6 +42,8 @@ namespace LangApp.Admin.WPF.ViewModels.PagesViewModels
                 _ => _paginateViewModel.ShowPage(CurrentPage + 1),
                 _ => _paginateViewModel.HasNextPage);
         }
+
+        public ICommand OpenAddTranslateCommand => _openAddTranslateCommand ??= new RelayCommand(OpenAddTranslateWindow);
 
         public string PageInfo
         {
@@ -63,6 +68,12 @@ namespace LangApp.Admin.WPF.ViewModels.PagesViewModels
 
             //ShowPage(1);
         }
+
+        public void OpenAddTranslateWindow(object? _)
+        {
+            _dialogService.OpenAddTranslateDialog();
+        }
+
         private void OnPageChanged(object? sender, EventArgs e)
         {
             NotifyPropertyChanged(nameof(CurrentPage));

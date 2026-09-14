@@ -68,7 +68,7 @@
                     HorizontalAlignment="Right"
                     VerticalAlignment="Center"
                     Style="{StaticResource PrimaryButtonStyle}"
-                    Command="{Binding OpenAddLanguageCommand}"/>
+                    Command="{Binding OpenAddTranslateCommand}"/>
         </Grid>
 
         <Border Grid.Row="2"

@@ -1,6 +1,7 @@
 ﻿using LangApp.Admin.WPF.Infrastructure;
 using LangApp.Admin.WPF.Models;
 using LangApp.Admin.WPF.Services;
+using LangApp.Admin.WPF.Services.Interfaces;
 using LangApp.Admin.WPF.ViewModels;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
@@ -10,19 +11,22 @@ using System.Windows.Input;
 public class LanguagePageViewModel : INotifyPropertyChanged
 {
     private readonly ILanguageService _languageService;
+    private readonly IDialogService _dialogService;
     private CancellationTokenSource? _loadCancellationTokenSource;
     private const int PageSize = 5;
     private List<Language> _allLanguages = [];
     private PaginateViewModel<Language> _pagenateViewModel = new(0, 1, PageSize);
+    private ICommand? _openAddLanguageCommad;
 
     public int CurrentPage => _pagenateViewModel.PaginateNumber;
     public event PropertyChangedEventHandler? PropertyChanged;
     public ObservableCollection<Language> Languages => _pagenateViewModel.PageCollection;
-    public LanguagePageViewModel(ILanguageService languageService)
+    public LanguagePageViewModel(ILanguageService languageService, IDialogService dialogService)
     {
         _pagenateViewModel.PageChanged += OnPageChanged;
 
         _languageService = languageService;
+        _dialogService = dialogService;
 
         PreviousPageCommand = new RelayCommand(
             _ => _pagenateViewModel.ShowPage(CurrentPage - 1),
@@ -33,6 +37,7 @@ public class LanguagePageViewModel : INotifyPropertyChanged
             _ => _pagenateViewModel.HasNextPage);
     }
 
+    public ICommand OpenAddLanguageCommand => _openAddLanguageCommad ??= new RelayCommand(OpenAddLanguageWindow);
 
     public string PageInfo
     {
@@ -56,6 +61,11 @@ public class LanguagePageViewModel : INotifyPropertyChanged
         _pagenateViewModel.ShowPage(1);
         
         //ShowPage(1);
+    }
+
+    public void OpenAddLanguageWindow(object? _)
+    {
+        _dialogService.OpenAddLanguageDialog();
     }
 
     private void OnPageChanged(object? sender, EventArgs e)

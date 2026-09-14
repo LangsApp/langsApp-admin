@@ -17,16 +17,15 @@ namespace LangApp.Admin.WPF.ViewModels.WindowsViewModels
         private readonly ICategoryService _categoryService;  
         private ICommand? _closeAddCategoryWindowCommand;
         private ICommand? _addCategory;
-        private CancellationTokenSource _cancellationTokenSource;
+        private CancellationTokenSource? _cancellationTokenSource;
         private Category _newCategory = new();
 
         public event PropertyChangedEventHandler? PropertyChanged;
         public event EventHandler? CloseAddCategoryWindowRequested;
 
-        public AddCategoryWindowViewModel(ICategoryService categoryService, CancellationTokenSource cancellationTokenSource)
+        public AddCategoryWindowViewModel(ICategoryService categoryService)
         {
             _categoryService = categoryService;
-            _cancellationTokenSource = cancellationTokenSource;
         }
 
         public ICommand CloseAddCategoryWindowCommand => 
@@ -36,7 +35,9 @@ namespace LangApp.Admin.WPF.ViewModels.WindowsViewModels
         
         public async Task AddNewCategoryAsync(object? param)
         {
-            if(_newCategory != null && !string.IsNullOrWhiteSpace(_newCategory.Name))
+            _cancellationTokenSource = new CancellationTokenSource();
+
+            if (_newCategory != null && !string.IsNullOrWhiteSpace(_newCategory.Name))
             {
                 await _categoryService.AddNewCategoryAsync(_newCategory.Name, _cancellationTokenSource.Token);
             }

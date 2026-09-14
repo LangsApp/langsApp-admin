@@ -65,6 +65,12 @@ namespace LangAppAdminWPFApp
             builder.Services.AddTransient<CategoriesPageViewModel>();
             builder.Services.AddTransient<AddCategoryWindow>();
             builder.Services.AddTransient<AddCategoryWindowViewModel>();
+            builder.Services.AddTransient<AddLanguageWindow>();
+            builder.Services.AddTransient<AddLanguageWindowViewModel>();
+            builder.Services.AddTransient<AddStageWindow>();
+            builder.Services.AddTransient<AddStageWindowViewModel>();
+            builder.Services.AddTransient<AddTranslateWindow>();
+            builder.Services.AddTransient<AddTranslateWindowViewModel>();
 
 
 

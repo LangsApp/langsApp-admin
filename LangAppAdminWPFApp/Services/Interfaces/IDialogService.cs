@@ -9,5 +9,8 @@ namespace LangApp.Admin.WPF.Services.Interfaces
     public interface IDialogService
     {
         void OpenAddCategoryDialog();
+        void OpenAddLanguageDialog();
+        void OpenAddStageDialog();
+        void OpenAddTranslateDialog();
     }
 }
