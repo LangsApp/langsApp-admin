@@ -11,6 +11,6 @@ namespace LangApp.Admin.WPF.Services.Interfaces
         void OpenAddCategoryDialog();
         void OpenAddLanguageDialog();
         void OpenAddStageDialog();
-        void OpenAddTranslateDialog();
+        void OpenAddWordDialog();
     }
 }

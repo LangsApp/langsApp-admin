@@ -24,7 +24,7 @@ namespace LangApp.Admin.WPF.ViewModels.WindowsViewModels
         public event PropertyChangedEventHandler? PropertyChanged;
         public event EventHandler? CloseAddLanguageWindowRequested;
 
-        public AddLanguageWindowViewModel(ILanguageService languageService)
+        public AddLanguageWindowViewModel(ILanguageService languageService) 
         {
             _languageService = languageService;
         }

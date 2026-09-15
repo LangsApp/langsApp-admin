@@ -69,8 +69,6 @@ namespace LangAppAdminWPFApp
             builder.Services.AddTransient<AddLanguageWindowViewModel>();
             builder.Services.AddTransient<AddStageWindow>();
             builder.Services.AddTransient<AddStageWindowViewModel>();
-            builder.Services.AddTransient<AddTranslateWindow>();
-            builder.Services.AddTransient<AddTranslateWindowViewModel>();
 
 
 

@@ -16,23 +16,21 @@ namespace LangApp.Admin.WPF.ViewModels.PagesViewModels
     public class TranslationsPageViewModel : INotifyPropertyChanged
     {
         private readonly ITranslatesService _translatesService;
-        private readonly IDialogService _dialogService;
         private CancellationTokenSource? _loadCancellationTokenSource;
         private const int PageSize = 5;
         private List<Translate> _allTranslates = [];
         private PaginateViewModel<Translate> _paginateViewModel = new(0, 1, PageSize);
-        private ICommand? _openAddTranslateCommand;
+        private ICommand? _createTranslatesCommand;
 
         public int CurrentPage => _paginateViewModel.PaginateNumber;
         public event PropertyChangedEventHandler? PropertyChanged;
         public ObservableCollection<Translate> Translates => _paginateViewModel.PageCollection;
 
-        public TranslationsPageViewModel(ITranslatesService translatesService, IDialogService dialogService)
+        public TranslationsPageViewModel(ITranslatesService translatesService)
         {
             _paginateViewModel.PageChanged += OnPageChanged;
 
             _translatesService = translatesService;
-            _dialogService = dialogService;
 
             PreviousPageCommand = new RelayCommand(
             _ => _paginateViewModel.ShowPage(CurrentPage - 1),
@@ -43,7 +41,8 @@ namespace LangApp.Admin.WPF.ViewModels.PagesViewModels
                 _ => _paginateViewModel.HasNextPage);
         }
 
-        public ICommand OpenAddTranslateCommand => _openAddTranslateCommand ??= new RelayCommand(OpenAddTranslateWindow);
+        public ICommand CreateTranslatesCommand => _createTranslatesCommand ??= 
+            new AsyncRelayCommand(CreateTranslatesAsync);
 
         public string PageInfo
         {
@@ -68,10 +67,13 @@ namespace LangApp.Admin.WPF.ViewModels.PagesViewModels
 
             //ShowPage(1);
         }
-
-        public void OpenAddTranslateWindow(object? _)
+        
+        public async Task CreateTranslatesAsync(object? param)
         {
-            _dialogService.OpenAddTranslateDialog();
+            _loadCancellationTokenSource?.Cancel();
+            _loadCancellationTokenSource?.Dispose();
+            _loadCancellationTokenSource = new CancellationTokenSource();
+            await _translatesService.CreateTranslatesAsync(_loadCancellationTokenSource.Token);
         }
 
         private void OnPageChanged(object? sender, EventArgs e)

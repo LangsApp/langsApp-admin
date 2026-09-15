@@ -10,5 +10,6 @@ namespace LangApp.Admin.WPF.Services.Interfaces
     public interface ITranslatesService
     {
         public Task<List<Translate>> GetTranslatesAsync(CancellationToken cancellationToken);
+        public Task<string> CreateTranslatesAsync(CancellationToken cancellationToken);
     }
 }

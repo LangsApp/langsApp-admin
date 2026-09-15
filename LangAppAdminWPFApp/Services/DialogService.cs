@@ -33,10 +33,6 @@ namespace LangApp.Admin.WPF.Services
             AddStageWindow window = _windowFactory.Create<AddStageWindow>();
             window.ShowDialog();
         }
-        public void OpenAddTranslateDialog()
-        {
-            AddTranslateWindow window = _windowFactory.Create<AddTranslateWindow>();
-            window.ShowDialog();
-        }
+        
     }
 }

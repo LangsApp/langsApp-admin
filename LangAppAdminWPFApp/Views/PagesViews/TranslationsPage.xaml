@@ -64,11 +64,11 @@
                            FontSize="16"
                            Foreground="#64748B"/>
             </StackPanel>
-            <Button Content="+  Add translation"
+            <Button Content="Update translation"
                     HorizontalAlignment="Right"
                     VerticalAlignment="Center"
                     Style="{StaticResource PrimaryButtonStyle}"
-                    Command="{Binding OpenAddTranslateCommand}"/>
+                    Command="{Binding CreateTranslatesCommand}"/>
         </Grid>
 
         <Border Grid.Row="2"

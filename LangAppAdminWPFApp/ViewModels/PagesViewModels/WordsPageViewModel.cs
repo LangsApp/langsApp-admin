@@ -16,19 +16,22 @@ namespace LangApp.Admin.WPF.ViewModels.PagesViewModels
     public class WordsPageViewModel : INotifyPropertyChanged
     {
         private readonly IWordsService _wordsService;
+        private readonly IDialogService _dialogService;
         private CancellationTokenSource? _loadCancellationTokenSource;
         private const int PageSize = 5;
         private List<BaseWord> _allBaseWords = [];
         private PaginateViewModel<BaseWord> _paginateViewModel = new(0, 1, PageSize);
+        private ICommand? _openAddWordCommand;
 
         public int CurrentPage => _paginateViewModel.PaginateNumber;
         public event PropertyChangedEventHandler? PropertyChanged;
         public ObservableCollection<BaseWord> BaseWords => _paginateViewModel.PageCollection;
 
-        public WordsPageViewModel(IWordsService wordsService)
+        public WordsPageViewModel(IWordsService wordsService, IDialogService dialogService)
         {
             _paginateViewModel.PageChanged += OnPageChanged;
             _wordsService = wordsService;
+            _dialogService = dialogService;
 
             PreviousPageCommand = new RelayCommand(
                 _ => _paginateViewModel.ShowPage(CurrentPage - 1),
@@ -39,6 +42,7 @@ namespace LangApp.Admin.WPF.ViewModels.PagesViewModels
                 _ => _paginateViewModel.HasNextPage);
         }
 
+        public ICommand OpenAddWordCommand => _openAddWordCommand ??= new RelayCommand(OpenAddWordWindow);
         public ICommand PreviousPageCommand { get; }
         public ICommand NextPageCommand { get; }
 
@@ -64,6 +68,10 @@ namespace LangApp.Admin.WPF.ViewModels.PagesViewModels
             //ShowPage(1);
         }
 
+        public void OpenAddWordWindow(object? _)
+        {
+            _dialogService.OpenAddWordDialog();
+        }
         private void OnPageChanged(object? sender, EventArgs e)
         {
             NotifyPropertyChanged(nameof(CurrentPage));
