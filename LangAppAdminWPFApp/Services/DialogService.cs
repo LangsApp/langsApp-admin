@@ -33,6 +33,12 @@ namespace LangApp.Admin.WPF.Services
             AddStageWindow window = _windowFactory.Create<AddStageWindow>();
             window.ShowDialog();
         }
+
+        public void OpenAddWordDialog()
+        {
+            AddWordWindow window = _windowFactory.Create<AddWordWindow>();
+            window.ShowDialog();
+        }
         
     }
 }

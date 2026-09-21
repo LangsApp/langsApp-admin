@@ -37,7 +37,7 @@ namespace LangApp.Admin.WPF.Services
                     ("Bearer", _tokenStorage.AccessToken);
 
                 var response = await _client
-                    .PostAsJsonAsync("api/Words/add-list-words", createBaseWordsByCategory, cancellationToken);
+                    .PostAsJsonAsync("api/Words/add-list-words-by-category", createBaseWordsByCategory, cancellationToken);
 
                 if(response.IsSuccessStatusCode)
                 {

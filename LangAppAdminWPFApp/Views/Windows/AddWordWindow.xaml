@@ -108,7 +108,7 @@
                 <Button Grid.Column="3"
                         Content="+ Add"
                         Style="{StaticResource PrimaryButtonStyle}"
-                        Command="{Binding AddWordToListCommand}"/>
+                        Command="{Binding AddWordsToListCommand}"/>
             </Grid>
         </Grid>
 
@@ -126,7 +126,7 @@
                        Foreground="#334155"/>
 
             <ListBox Grid.Row="2"
-                     ItemsSource="{Binding Words}"
+                     ItemsSource="{Binding NewWordsToSave}"
                      BorderBrush="#CBD5E1"
                      BorderThickness="1"
                      Background="White"
@@ -181,7 +181,7 @@
             <Button Content="Save words"
                     Width="130"
                     Style="{StaticResource PrimaryButtonStyle}"
-                    Command="{Binding AddWordsCommand}"/>
+                    Command="{Binding SaveWordsCommand}"/>
         </StackPanel>
     </Grid>
 </Window>

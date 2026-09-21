@@ -24,10 +24,10 @@ namespace LangApp.Admin.WPF.Views.Windows
         {
             InitializeComponent();
             DataContext = addStageWindowViewModel;
-            addStageWindowViewModel.CloseAddStageWindowRequested += OnCloseAddCategoryWindowRequested;
+            addStageWindowViewModel.CloseAddStageWindowRequested += OnCloseAddStageWindowRequested;
         }
 
-        private void OnCloseAddCategoryWindowRequested(object? sender, EventArgs e)
+        private void OnCloseAddStageWindowRequested(object? sender, EventArgs e)
         {
             Close();
         }

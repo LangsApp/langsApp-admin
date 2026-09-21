@@ -18,10 +18,10 @@ namespace LangApp.Admin.WPF.ViewModels.WindowsViewModels
     {
         private readonly IWordsService _wordService;
         private ICommand? _closeAddWordWindowCommand;
-        private ICommand? _addWordsCommand;
+        private ICommand? _saveWordsCommand;
         private ICommand? _addWordsToList;
         private CancellationTokenSource? _cancellationTokenSource;
-        private ObservableCollection<string> newWords = new();
+        private ObservableCollection<string> newWordsToSave = new();
         private string _category = string.Empty;
         private string newWordText = string.Empty;
 
@@ -35,16 +35,17 @@ namespace LangApp.Admin.WPF.ViewModels.WindowsViewModels
 
         public ICommand CloseAddWordWindowCommand =>
             _closeAddWordWindowCommand ??= new RelayCommand(CloseAddWordWindow);
-        public ICommand AddWordsCommand => _addWordsCommand ??= new AsyncRelayCommand(AddNewWordsAsync);
-        public ICommand AddWordsToList => _addWordsToList ??= new RelayCommand(AddNewWordsToList);
+        public ICommand AddWordsToListCommand => _addWordsToList ??= new RelayCommand(AddNewWordsToList);
+        public ICommand SaveWordsCommand => _saveWordsCommand ??= new AsyncRelayCommand(AddNewWordsAsync);
+        
 
         public void AddNewWordsToList(object? param)
         {
             if (!string.IsNullOrWhiteSpace(NewWordText))
             {
-                newWords.Add(NewWordText);
+                newWordsToSave.Add(NewWordText);
                 NewWordText = string.Empty;
-                NotifyPropertyChanged(nameof(NewWords));
+                NotifyPropertyChanged(nameof(NewWordsToSave));
             }
         }
 
@@ -56,17 +57,17 @@ namespace LangApp.Admin.WPF.ViewModels.WindowsViewModels
             {
                 var request = new CreateBaseWordsByCategoryDTO
                 {
-                    Category = Category,
-                    BaseWord = newWords.Select(word => new CreateBaseWordDTO { BaseWord = word }).ToList()
+                    CategoryName = Category,
+                    Words = newWordsToSave.Select(word => new CreateBaseWordDTO { BaseWord = word }).ToList()
                 };
 
                 await _wordService.AddNewBaseWordsByCategoryAsync(request, _cancellationTokenSource.Token);
             }
-            else if (newWords.Count == 1)
+            else if (newWordsToSave.Count == 1)
             {
                 var request = new CreateBaseWordDTO
                 {
-                    BaseWord = newWords.FirstOrDefault() ?? string.Empty
+                    BaseWord = newWordsToSave.FirstOrDefault() ?? string.Empty
                 };
 
                 await _wordService.AddNewBaseWordAsync(request, _cancellationTokenSource.Token);
@@ -98,14 +99,14 @@ namespace LangApp.Admin.WPF.ViewModels.WindowsViewModels
             }
         }
 
-        public ObservableCollection<string> NewWords
+        public ObservableCollection<string> NewWordsToSave
         {
-            get => newWords;
+            get => newWordsToSave;
             set
             {
-                if (newWords != value)
+                if (newWordsToSave != value)
                 {
-                    newWords = value;
+                    newWordsToSave = value;
                     NotifyPropertyChanged();
                 }
             }

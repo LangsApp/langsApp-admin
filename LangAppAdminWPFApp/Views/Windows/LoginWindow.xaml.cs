@@ -1,4 +1,5 @@
-﻿using LangApp.Admin.WPF.ViewModels.WindowsViewModels;
+﻿using LangApp.Admin.WPF.Services.Interfaces;
+using LangApp.Admin.WPF.ViewModels.WindowsViewModels;
 using LangAppAdminWPFApp;
 using System;
 using System.Collections.Generic;
@@ -21,12 +22,12 @@ namespace LangApp.Admin.WPF.Views
     /// </summary>
     public partial class LoginWindow : Window
     {
-        private readonly MainWindow _mainWindow;
-        public LoginWindow(LoginWindowViewModel viewModel, MainWindow mainWindow)
+        private readonly IWindowFactory _windowFactory;
+        public LoginWindow(LoginWindowViewModel viewModel, IWindowFactory windowFactory)
         {
             InitializeComponent();
             DataContext = viewModel;
-            _mainWindow = mainWindow;
+            _windowFactory = windowFactory;
 
             viewModel.LoginSucceeded += OnLoginSucceeded;
         }
@@ -42,9 +43,12 @@ namespace LangApp.Admin.WPF.Views
 
         private void OnLoginSucceeded(object? sender, EventArgs e)
         {
-            Application.Current.MainWindow = _mainWindow;
+            MainWindow mainWindow = 
+                _windowFactory.Create<MainWindow>();
 
-            _mainWindow.Show();
+            Application.Current.MainWindow = mainWindow;
+
+            mainWindow.Show();
             Close();
         }
     }

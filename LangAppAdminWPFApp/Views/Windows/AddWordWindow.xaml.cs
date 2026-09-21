@@ -1,4 +1,5 @@
-﻿using System;
+﻿using LangApp.Admin.WPF.ViewModels.WindowsViewModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -19,9 +20,16 @@ namespace LangApp.Admin.WPF.Views.Windows
     /// </summary>
     public partial class AddWordWindow : Window
     {
-        public AddWordWindow()
+        public AddWordWindow(AddWordWindowViewModel addWordWindowViewModel)
         {
             InitializeComponent();
+            DataContext = addWordWindowViewModel;
+            addWordWindowViewModel.CloseAddWordWindowRequested += OnCloseAddWordWindowRequested;
+        }
+
+        private void OnCloseAddWordWindowRequested(object? sender, EventArgs e)
+        {
+            Close();
         }
     }
 }

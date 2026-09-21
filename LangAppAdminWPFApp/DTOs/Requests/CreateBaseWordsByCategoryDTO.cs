@@ -8,7 +8,7 @@ namespace LangApp.Admin.WPF.DTOs.Requests
 {
     public class CreateBaseWordsByCategoryDTO
     {
-        public string Category { get; set; } = string.Empty;
-        public List<CreateBaseWordDTO> BaseWord { get; set; } = new();
+        public string CategoryName { get; set; } = string.Empty;
+        public List<CreateBaseWordDTO> Words { get; set; } = new();
     }
 }
