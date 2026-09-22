@@ -23,10 +23,12 @@ namespace LangApp.Admin.WPF.ViewModels.PagesViewModels
         private List<Category> _allCategories = [];
         private PaginateViewModel<Category> _pagenateViewModel = new(0, 1, PageSize);
         private ICommand? _openAddCategoryCommand;
+        private ICommand? _openEditCategoryCommand;
 
         public int CurrentPage => _pagenateViewModel.PaginateNumber;
         public event PropertyChangedEventHandler? PropertyChanged;
         public ObservableCollection<Category> Categories => _pagenateViewModel.PageCollection;
+
 
         public CategoriesPageViewModel(ICategoryService categoryService, IDialogService dialogService)
         {
@@ -45,6 +47,8 @@ namespace LangApp.Admin.WPF.ViewModels.PagesViewModels
         }
 
         public ICommand OpenAddCategoryCommand => _openAddCategoryCommand ??= new RelayCommand(OpenAddCategoryWindow);
+        public ICommand OpenEditCategoryCommand => _openEditCategoryCommand 
+            ??= new RelayCommand(OpenEditCategoryWindow, CanOpenEditCategoryWindow);
 
         public string PageInfo
         {
@@ -53,6 +57,8 @@ namespace LangApp.Admin.WPF.ViewModels.PagesViewModels
                 return _pagenateViewModel.PageInfo("categories");
             }
         }
+
+        
         public ICommand PreviousPageCommand { get; }
         public ICommand NextPageCommand { get; }
         
@@ -71,9 +77,25 @@ namespace LangApp.Admin.WPF.ViewModels.PagesViewModels
             //ShowPage(1);
         }
 
-        public void OpenAddCategoryWindow(object? _)
+        
+
+        public bool CanOpenEditCategoryWindow(object? param)
+        {
+            return param is Category;
+        }
+
+        private void OpenAddCategoryWindow(object? _)
         {
             _dialogService.OpenAddCategoryDialog();
+        }
+
+        private void OpenEditCategoryWindow(object? param)
+        {
+            if (param is not Category category)
+            {
+                return;
+            }
+            _dialogService.OpenEditCategoryDialog(category);
         }
 
         private void OnPageChanged(object? sender, EventArgs e)

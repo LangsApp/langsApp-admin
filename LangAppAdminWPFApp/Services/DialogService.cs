@@ -1,4 +1,5 @@
-﻿using LangApp.Admin.WPF.Services.Interfaces;
+﻿using LangApp.Admin.WPF.Models;
+using LangApp.Admin.WPF.Services.Interfaces;
 using LangApp.Admin.WPF.Views.Windows;
 using System;
 using System.Collections.Generic;
@@ -40,5 +41,10 @@ namespace LangApp.Admin.WPF.Services
             window.ShowDialog();
         }
         
+        public void OpenEditCategoryDialog(Category selectedCategory)
+        {
+            EditCategoryWindow window = _windowFactory.Create<EditCategoryWindow>(selectedCategory);
+            window.ShowDialog();
+        }
     }
 }

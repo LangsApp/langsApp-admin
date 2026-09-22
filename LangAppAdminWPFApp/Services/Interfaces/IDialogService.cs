@@ -1,4 +1,5 @@
-﻿using System;
+﻿using LangApp.Admin.WPF.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -12,5 +13,6 @@ namespace LangApp.Admin.WPF.Services.Interfaces
         void OpenAddLanguageDialog();
         void OpenAddStageDialog();
         void OpenAddWordDialog();
+        void OpenEditCategoryDialog(Category selectedCategory);
     }
 }

@@ -18,11 +18,13 @@ namespace LangApp.Admin.WPF.Services
             _serviceProvider = serviceProvider;
         }
 
-        public TWindow Create<TWindow>()
+        public TWindow Create<TWindow>(params object[] parameters)
             where TWindow : Window
         {
-            return _serviceProvider
-                .GetRequiredService<TWindow>();
+            return ActivatorUtilities.CreateInstance<TWindow>(
+                _serviceProvider,
+                parameters
+                );
         }
     }
 }

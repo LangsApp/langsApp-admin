@@ -3,6 +3,7 @@ using LangApp.Admin.WPF.Models;
 using LangApp.Admin.WPF.Services.Interfaces;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
@@ -44,8 +45,8 @@ namespace LangApp.Admin.WPF.Services
                 if (response.IsSuccessStatusCode)
                 {
                     var result = await response.Content.ReadAsStringAsync(cancellationToken: cancellationToken);
-
-                    return result ?? throw new Exception("Category want added");
+                    Debug.WriteLine($"We`ve got result: { result } ");
+                    return result ?? throw new Exception("Category wasn`t added");
                 }
                 else
                 {

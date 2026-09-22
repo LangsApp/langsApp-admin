@@ -9,7 +9,7 @@ namespace LangApp.Admin.WPF.Services.Interfaces
 {
     public interface IWindowFactory
     {
-        TWindow Create<TWindow>()
+        TWindow Create<TWindow>(params object[] parameters)
            where TWindow : Window;
     }
 }

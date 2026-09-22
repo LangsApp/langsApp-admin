@@ -71,6 +71,8 @@ namespace LangAppAdminWPFApp
             builder.Services.AddTransient<AddStageWindowViewModel>();
             builder.Services.AddTransient<AddWordWindow>();
             builder.Services.AddTransient<AddWordWindowViewModel>();
+            builder.Services.AddTransient<EditCategoryWindow>();
+            builder.Services.AddTransient<EditCategoryWindowViewModel>();
 
 
 
