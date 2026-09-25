@@ -1,4 +1,5 @@
-﻿using LangApp.Admin.WPF.Models;
+﻿using LangApp.Admin.WPF.DTOs.Requests;
+using LangApp.Admin.WPF.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,5 +13,7 @@ namespace LangApp.Admin.WPF.Services.Interfaces
         public Task<List<Category>> GetCategoriesAsync(CancellationToken cancellationToken);
 
         public Task<string> AddNewCategoryAsync(string newCategory, CancellationToken cancellationToken);
+
+        public Task<string> EditCategoryAsync(EditCategoryDTO editCategoryDTO, CancellationToken cancellationToken);
     }
 }

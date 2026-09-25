@@ -59,5 +59,20 @@ namespace LangApp.Admin.WPF.Services
                 throw new Exception($"Add category failed: {ex.Message}");
             }
         }
+
+        public async Task<string> EditCategoryAsync(EditCategoryDTO editCategoryDTO, CancellationToken cancellationToken)
+        {
+            try
+            {
+                _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue
+                ("Bearer", _tokenStorage.AccessToken);
+
+                var response = await _client.PostAsJsonAsync("", )
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Edit category failed: {ex.Message}");
+            }
+        }
     }
 }
