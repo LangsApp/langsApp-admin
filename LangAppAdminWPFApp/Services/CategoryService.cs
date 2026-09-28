@@ -67,7 +67,17 @@ namespace LangApp.Admin.WPF.Services
                 _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue
                 ("Bearer", _tokenStorage.AccessToken);
 
-                var response = await _client.PostAsJsonAsync("", )
+                var response = await _client.PutAsJsonAsync("api/Category/update-category", editCategoryDTO, cancellationToken);
+                if (response.IsSuccessStatusCode)
+                {
+                    var result = await response.Content.ReadAsStringAsync (cancellationToken: cancellationToken);
+                    return result ?? throw new Exception("Category didn`t update");
+                }
+                else
+                {
+                    var errorMessage = await response.Content.ReadAsStringAsync(cancellationToken);
+                    throw new Exception($"Edit category failed: {response.StatusCode} - {errorMessage}");
+                }
             }
             catch (Exception ex)
             {

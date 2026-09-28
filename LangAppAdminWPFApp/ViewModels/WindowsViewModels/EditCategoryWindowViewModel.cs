@@ -21,6 +21,8 @@ namespace LangApp.Admin.WPF.ViewModels.WindowsViewModels
         private ICommand? _saveEditedCategoryCommand;
         private CancellationTokenSource? _cancellationTokenSource;
         private EditCategoryDTO _editCategoryDTO = new();
+        private string _newName = string.Empty;
+        public Category? CategoryToEdit { get; set; }
 
         public event PropertyChangedEventHandler? PropertyChanged;
         public event EventHandler? CloseEditCategoryWindowRequested;
@@ -38,22 +40,31 @@ namespace LangApp.Admin.WPF.ViewModels.WindowsViewModels
 
         public async Task SaveEditedCategoryAsync(object? _)
         {
-            _cancellationTokenSource = new CancellationTokenSource();
-
-            if(string.IsNullOrWhiteSpace(_editCategoryDTO.EditedCategory))
+            if(!string.IsNullOrWhiteSpace(_newName) && CategoryToEdit != null)
             {
+                _cancellationTokenSource = new CancellationTokenSource();
+                _editCategoryDTO = new EditCategoryDTO
+                {
+                    CategoryToEditId = CategoryToEdit.Id,
+                    CategoryToEditName = CategoryToEdit.Name,
+                    EditedCategory = _newName
+                };
                 await _categoryService.EditCategoryAsync(_editCategoryDTO, _cancellationTokenSource.Token);
+            }
+            else
+            {// improve
+                return;
             }
         }
 
-        public EditCategoryDTO EditCategoryDTO
+        public string NewName
         {
-            get => _editCategoryDTO;
+            get => _newName;
             set
             {
-                if(_editCategoryDTO != value)
+                if(_newName != value)
                 {
-                    _editCategoryDTO = value;
+                    _newName = value;
                     NotifyPropertyChanged();
                 }
             }
