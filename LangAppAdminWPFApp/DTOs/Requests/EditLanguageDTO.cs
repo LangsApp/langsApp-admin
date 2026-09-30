@@ -1,0 +1,16 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace LangApp.Admin.WPF.DTOs.Requests
+{
+    public class EditLanguageDTO
+    {
+        public string LangCodeToEdit { get; set; } = string.Empty;
+
+        public string EditedName { get; set; } = string.Empty;
+        public string EditedLangCode {  get; set; } = string.Empty;
+    }
+}

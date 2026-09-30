@@ -56,5 +56,30 @@ namespace LangApp.Admin.WPF.Services
                 throw new Exception($"Add language failed: {ex.Message}");
             }
         }
+
+        public async Task<string> EditLanguageAsync(EditLanguageDTO editLanguageDTO, CancellationToken cancellationToken)
+        {
+            try
+            {
+                _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue
+                ("Bearer", _tokenStorage.AccessToken);
+
+                var response = await _client.PutAsJsonAsync("", editLanguageDTO, cancellationToken);
+                if (response.IsSuccessStatusCode)
+                {
+                    var result = await response.Content.ReadAsStringAsync(cancellationToken: cancellationToken);
+                    return result ?? throw new Exception("Language didn`t update");
+                }
+                else
+                {
+                    var errorMessage = await response.Content.ReadAsStringAsync(cancellationToken);
+                    throw new Exception($"Edit language failed: {response.StatusCode} - {errorMessage}");
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Edit language failed: {ex.Message}");
+            }
+        }
     }
 }

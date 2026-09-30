@@ -9,9 +9,7 @@ using System.Threading.Tasks;
 namespace LangApp.Admin.WPF.DTOs.Requests
 {
     public class EditCategoryDTO
-    {
-        // має бути string
-        public Guid CategoryToEditId { get; set; }
+    {   
         public string CategoryToEditName { get; set; } = string.Empty;
         public string EditedCategory { get; set; } = string.Empty;
     }

@@ -12,5 +12,6 @@ namespace LangApp.Admin.WPF.Services
     {
         public Task<List<Language>> GetLanguagesAsync(CancellationToken cancellationToken);
         public Task<string> AddNewLanguageAsync(CreateLanguageDTO newLanguage, CancellationToken token);
+        public Task<string> EditLanguageAsync(EditLanguageDTO editedLanguageDTO, CancellationToken token);
     }
 }

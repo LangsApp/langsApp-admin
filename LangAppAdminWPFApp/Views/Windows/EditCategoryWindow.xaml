@@ -84,7 +84,7 @@
                     BorderThickness="1"
                     CornerRadius="2">
 
-                <TextBlock Text="{Binding EditCategoryDTO.CategoryToEdit}"
+                <TextBlock Text="{Binding CategoryToEdit.Name}"
                            VerticalAlignment="Center"
                            FontSize="14"
                            Foreground="#64748B"/>
@@ -102,7 +102,7 @@
                        Foreground="#334155"/>
 
             <TextBox Style="{StaticResource InputStyle}"
-                     Text="{Binding EditCategoryDTO.EditedCategory,
+                     Text="{Binding NewName,
                                     UpdateSourceTrigger=PropertyChanged}"/>
 
         </StackPanel>
@@ -126,7 +126,7 @@
             <Button Content="Save"
                     Width="120"
                     Style="{StaticResource PrimaryButtonStyle}"
-                    Command="{Binding SaveCategoryCommand}"/>
+                    Command="{Binding SaveEditedCategoryCommand}"/>
 
         </StackPanel>
 

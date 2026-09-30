@@ -22,7 +22,7 @@ namespace LangApp.Admin.WPF.ViewModels.WindowsViewModels
         private CancellationTokenSource? _cancellationTokenSource;
         private EditCategoryDTO _editCategoryDTO = new();
         private string _newName = string.Empty;
-        public Category? CategoryToEdit { get; set; }
+        
 
         public event PropertyChangedEventHandler? PropertyChanged;
         public event EventHandler? CloseEditCategoryWindowRequested;
@@ -45,7 +45,6 @@ namespace LangApp.Admin.WPF.ViewModels.WindowsViewModels
                 _cancellationTokenSource = new CancellationTokenSource();
                 _editCategoryDTO = new EditCategoryDTO
                 {
-                    CategoryToEditId = CategoryToEdit.Id,
                     CategoryToEditName = CategoryToEdit.Name,
                     EditedCategory = _newName
                 };
@@ -57,6 +56,7 @@ namespace LangApp.Admin.WPF.ViewModels.WindowsViewModels
             }
         }
 
+        public Category? CategoryToEdit { get; set; }
         public string NewName
         {
             get => _newName;
@@ -69,20 +69,6 @@ namespace LangApp.Admin.WPF.ViewModels.WindowsViewModels
                 }
             }
         }
-        //public Category? CategoryToEdit { get; set; }
-        //public string NewName
-        //{
-        //    get => _newName;
-
-        //    set
-        //    {
-        //        if(_newName != value)
-        //        {
-        //            _newName = value;
-        //            NotifyPropertyChanged();
-        //        }
-        //    }
-        //}
         
         public void CloseEditCategoryWindow(object? _)
         {
