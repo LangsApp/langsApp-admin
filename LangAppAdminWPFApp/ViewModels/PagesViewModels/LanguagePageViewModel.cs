@@ -16,7 +16,8 @@ public class LanguagePageViewModel : INotifyPropertyChanged
     private const int PageSize = 5;
     private List<Language> _allLanguages = [];
     private PaginateViewModel<Language> _pagenateViewModel = new(0, 1, PageSize);
-    private ICommand? _openAddLanguageCommad;
+    private ICommand? _openAddLanguageCommand;
+    private ICommand? _openEditLanguageCommand;
 
     public int CurrentPage => _pagenateViewModel.PaginateNumber;
     public event PropertyChangedEventHandler? PropertyChanged;
@@ -37,7 +38,9 @@ public class LanguagePageViewModel : INotifyPropertyChanged
             _ => _pagenateViewModel.HasNextPage);
     }
 
-    public ICommand OpenAddLanguageCommand => _openAddLanguageCommad ??= new RelayCommand(OpenAddLanguageWindow);
+    public ICommand OpenAddLanguageCommand => _openAddLanguageCommand ??= new RelayCommand(OpenAddLanguageWindow);
+    public ICommand OpenEditLanguageCommand => _openEditLanguageCommand
+        ??= new RelayCommand(OpenEditLanguageWindow, CanOpenEditLanguageWindow);
 
     public string PageInfo
     {
@@ -75,31 +78,20 @@ public class LanguagePageViewModel : INotifyPropertyChanged
 
         CommandManager.InvalidateRequerySuggested();
     }
+    
+    private bool CanOpenEditLanguageWindow(object? param)
+    {
+        return param is Language;
+    }
 
-    //private void ShowPage(int pageNumber)
-    //{
-    //    _paginateViewModel = new PaginateViewModel<Language>(
-    //        _allLanguages.Count,
-    //        pageNumber,
-    //        PageSize);
-
-    //    var pageItems = _allLanguages
-    //        .Skip((CurrentPage - 1) * PageSize)
-    //        .Take(PageSize);
-
-    //    Languages.Clear();
-
-    //    foreach (var language in pageItems)
-    //    {
-    //        Languages.Add(language);
-    //    }
-
-    //    NotifyPropertyChanged(nameof(CurrentPage));
-    //    NotifyPropertyChanged(nameof(PageInfo));
-
-    //    CommandManager.InvalidateRequerySuggested();
-    //}
-
+    private void OpenEditLanguageWindow(object? param)
+    {
+        if(param is not Language language)
+        {
+            return;
+        }
+        _dialogService.OpenEditLanguageDialog(language);
+    }
 
     private void NotifyPropertyChanged([CallerMemberName] string? name = null)
     {

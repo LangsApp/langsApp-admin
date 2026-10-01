@@ -79,7 +79,7 @@ namespace LangApp.Admin.WPF.ViewModels.PagesViewModels
 
         
 
-        public bool CanOpenEditCategoryWindow(object? param)
+        private bool CanOpenEditCategoryWindow(object? param)
         {
             return param is Category;
         }

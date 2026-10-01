@@ -22,7 +22,7 @@ namespace LangApp.Admin.WPF.Models
             private set;
         }
 
-        public string LangCode
+        public string Code
         {
             get => langCode;
             set

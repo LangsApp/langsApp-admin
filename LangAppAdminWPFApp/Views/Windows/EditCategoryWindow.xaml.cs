@@ -21,7 +21,7 @@ namespace LangApp.Admin.WPF.Views.Windows
     /// </summary>
     public partial class EditCategoryWindow : Window
     {
-        public EditCategoryWindow(// чи не виникне проблеми при закритті?
+        public EditCategoryWindow(
             EditCategoryWindowViewModel editCategoryWindowViewModel, Category selectedCategory)
         {
             InitializeComponent();

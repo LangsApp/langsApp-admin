@@ -53,5 +53,30 @@ namespace LangApp.Admin.WPF.Services.Interfaces
                 throw new Exception($"Add stage failed: {ex.Message}");
             }
         }
+
+        public async Task<string> EditStageAsync(EditStageDTO newStage, CancellationToken cancellationToken)
+        {
+            try
+            {
+                _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue
+                ("Bearer", _tokenStorage.AccessToken);
+
+                var response = await _client.PutAsJsonAsync("api/Stage/update-stage", newStage, cancellationToken);
+                if(response.IsSuccessStatusCode)
+                {
+                    var result = await response.Content.ReadAsStringAsync(cancellationToken: cancellationToken);
+                    return result ?? throw new Exception("Stage didn`t update");
+                }
+                else
+                {
+                    var errorMessage = await response.Content.ReadAsStringAsync(cancellationToken);
+                    throw new Exception($"Edit stage failed: {response.StatusCode} - {errorMessage}");
+                }
+            }
+            catch(Exception ex)
+            {
+                throw new Exception($"Edit stage failed: {ex.Message}");
+            }
+        }
     }
 }

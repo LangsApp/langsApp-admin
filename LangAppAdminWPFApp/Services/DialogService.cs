@@ -46,5 +46,15 @@ namespace LangApp.Admin.WPF.Services
             EditCategoryWindow window = _windowFactory.Create<EditCategoryWindow>(selectedCategory);
             window.ShowDialog();
         }
+        public void OpenEditLanguageDialog(Language selectedLanguage)
+        {
+            EditLanguageWindow window = _windowFactory.Create<EditLanguageWindow>(selectedLanguage);
+            window.ShowDialog();
+        }
+        public void OpenEditStageDialog(Stage selectedStage)
+        {
+            EditStageWindow window = _windowFactory.Create<EditStageWindow>(selectedStage);
+            window.ShowDialog();
+        }
     }
 }

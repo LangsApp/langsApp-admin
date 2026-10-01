@@ -115,7 +115,7 @@
                     <DataGrid.Columns>
 
                         <DataGridTextColumn Header="Stage"
-                                            Binding="{Binding StageName}"
+                                            Binding="{Binding Name}"
                                             Width="130"/>
 
                         <DataGridTextColumn Header="Order"
@@ -136,7 +136,7 @@
                                         <Button Content="Edit"
                                                 Padding="10,4"
                                                 Margin="0,0,8,0"
-                                                Command="{Binding DataContext.EditStageCommand, 
+                                                Command="{Binding DataContext.OpenEditStageCommand, 
                                             RelativeSource={RelativeSource AncestorType=Page}}"
                                                 CommandParameter="{Binding}"/>
 

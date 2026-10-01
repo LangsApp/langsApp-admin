@@ -22,7 +22,7 @@ namespace LangApp.Admin.WPF.Views.Windows
     public partial class EditLanguageWindow : Window
     {
         public EditLanguageWindow(
-            EditLanguageViewModel editLanguageViewModel, Language selectedLanguage)
+            EditLanguageWindowViewModel editLanguageViewModel, Language selectedLanguage)
         {
             InitializeComponent();
             DataContext = editLanguageViewModel;

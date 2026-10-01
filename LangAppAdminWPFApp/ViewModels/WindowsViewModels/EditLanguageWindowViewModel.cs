@@ -46,9 +46,9 @@ namespace LangApp.Admin.WPF.ViewModels.WindowsViewModels
                 _cancellationTokenSource = new CancellationTokenSource();
                 _editLanguageDTO = new EditLanguageDTO
                 {
-                    LangCodeToEdit = LanguageToEdit!.LangCode,
+                    LangCodeToEdit = LanguageToEdit!.Code,
                     EditedLangCode = string.IsNullOrWhiteSpace(_newLangCode)
-                        ? LanguageToEdit.LangCode
+                        ? LanguageToEdit.Code
                         : _newLangCode,
 
                     EditedName = string.IsNullOrWhiteSpace(_newName)

@@ -22,6 +22,7 @@ namespace LangApp.Admin.WPF.ViewModels.PagesViewModels
         private List<Stage> _allStages = [];
         private PaginateViewModel<Stage> _paginateViewModel = new(0, 1, PageSize);
         private ICommand? _openAddStageCommand;
+        private ICommand? _openEditStageCommand;
 
         public int CurrentPage => _paginateViewModel.PaginateNumber;
         public event PropertyChangedEventHandler? PropertyChanged;
@@ -53,6 +54,8 @@ namespace LangApp.Admin.WPF.ViewModels.PagesViewModels
         public ICommand PreviousPageCommand { get; }
         public ICommand NextPageCommand { get; }
         public ICommand OpenAddStageCommand => _openAddStageCommand ??= new RelayCommand(OpenAddStageWindow);
+        public ICommand OpenEditStageCommand => _openEditStageCommand
+            ??= new RelayCommand(OpenEditStageWindow, CanOpenEditStageWindow);
 
         public async Task LoadStagesAsync()
         {
@@ -78,6 +81,21 @@ namespace LangApp.Admin.WPF.ViewModels.PagesViewModels
 
             CommandManager.InvalidateRequerySuggested();
         }
+
+        private bool CanOpenEditStageWindow(object? param)
+        {
+            return param is Stage;
+        }
+
+        private void OpenEditStageWindow(object? param)
+        {
+            if(param is not Stage selectedStage)
+            {
+                return;
+            }
+            _dialogService.OpenEditStageDialog(selectedStage);
+        }
+
         private void NotifyPropertyChanged([CallerMemberName] string? name = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));

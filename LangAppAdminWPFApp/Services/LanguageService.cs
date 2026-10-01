@@ -64,7 +64,7 @@ namespace LangApp.Admin.WPF.Services
                 _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue
                 ("Bearer", _tokenStorage.AccessToken);
 
-                var response = await _client.PutAsJsonAsync("", editLanguageDTO, cancellationToken);
+                var response = await _client.PutAsJsonAsync("api/AdminLangCodes/update-language", editLanguageDTO, cancellationToken);
                 if (response.IsSuccessStatusCode)
                 {
                     var result = await response.Content.ReadAsStringAsync(cancellationToken: cancellationToken);
