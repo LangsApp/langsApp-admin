@@ -1,4 +1,5 @@
-﻿using LangApp.Admin.WPF.Models;
+﻿using LangApp.Admin.WPF.DTOs.Requests;
+using LangApp.Admin.WPF.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,5 +12,6 @@ namespace LangApp.Admin.WPF.Services.Interfaces
     {
         public Task<List<Translate>> GetTranslatesAsync(CancellationToken cancellationToken);
         public Task<string> CreateTranslatesAsync(CancellationToken cancellationToken);
+        public Task<string> UpdateTranslatesAsync(EditTranslateDTO editedTranslateDTO, CancellationToken cancellationToken);
     }
 }

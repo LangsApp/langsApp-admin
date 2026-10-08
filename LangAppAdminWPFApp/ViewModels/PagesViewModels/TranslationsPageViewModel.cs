@@ -16,21 +16,24 @@ namespace LangApp.Admin.WPF.ViewModels.PagesViewModels
     public class TranslationsPageViewModel : INotifyPropertyChanged
     {
         private readonly ITranslatesService _translatesService;
+        private readonly IDialogService _dialogService;
         private CancellationTokenSource? _loadCancellationTokenSource;
         private const int PageSize = 5;
         private List<Translate> _allTranslates = [];
         private PaginateViewModel<Translate> _paginateViewModel = new(0, 1, PageSize);
         private ICommand? _createTranslatesCommand;
+        private ICommand? _openEditTranslateCommand;
 
         public int CurrentPage => _paginateViewModel.PaginateNumber;
         public event PropertyChangedEventHandler? PropertyChanged;
         public ObservableCollection<Translate> Translates => _paginateViewModel.PageCollection;
 
-        public TranslationsPageViewModel(ITranslatesService translatesService)
+        public TranslationsPageViewModel(ITranslatesService translatesService, IDialogService dialogService)
         {
             _paginateViewModel.PageChanged += OnPageChanged;
 
             _translatesService = translatesService;
+            _dialogService = dialogService;
 
             PreviousPageCommand = new RelayCommand(
             _ => _paginateViewModel.ShowPage(CurrentPage - 1),
@@ -43,6 +46,8 @@ namespace LangApp.Admin.WPF.ViewModels.PagesViewModels
 
         public ICommand CreateTranslatesCommand => _createTranslatesCommand ??= 
             new AsyncRelayCommand(CreateTranslatesAsync);
+        public ICommand OpenEditTranslateCommand => _openEditTranslateCommand ??=
+            new RelayCommand(OpenEditTranslateWindow, CanOpenEditTranslateWindow);
 
         public string PageInfo
         {
@@ -82,6 +87,20 @@ namespace LangApp.Admin.WPF.ViewModels.PagesViewModels
             NotifyPropertyChanged(nameof(PageInfo));
 
             CommandManager.InvalidateRequerySuggested();
+        }
+
+        private void OpenEditTranslateWindow(object? param)
+        {
+            if(param is not Translate translate)
+            {
+                return;
+            }
+            _dialogService.OpenEditTranslateDialog(translate);
+        }
+
+        private bool CanOpenEditTranslateWindow(object? param)
+        {
+            return param is Translate;
         }
         private void NotifyPropertyChanged([CallerMemberName] string? name = null)
         {

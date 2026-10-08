@@ -1,5 +1,5 @@
 ﻿using LangApp.Admin.WPF.Models;
-using LangApp.Admin.WPF.ViewModels.WindowsViewModels;
+using LangApp.Admin.WPF.ViewModels.WindowsViewModels.Edit;
 using System;
 using System.Collections.Generic;
 using System.Linq;

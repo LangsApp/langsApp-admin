@@ -1,4 +1,4 @@
-﻿using LangApp.Admin.WPF.ViewModels.WindowsViewModels;
+﻿using LangApp.Admin.WPF.ViewModels.WindowsViewModels.Add;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,18 +16,18 @@ using System.Windows.Shapes;
 namespace LangApp.Admin.WPF.Views.Windows
 {
     /// <summary>
-    /// Interaction logic for AddLanguageWindow.xaml
+    /// Interaction logic for AddStageWindow.xaml
     /// </summary>
-    public partial class AddLanguageWindow : Window
+    public partial class AddStageWindow : Window
     {
-        public AddLanguageWindow(AddLanguageWindowViewModel addLanguageWindowViewModel)
+        public AddStageWindow(AddStageWindowViewModel addStageWindowViewModel)
         {
             InitializeComponent();
-            DataContext = addLanguageWindowViewModel;
-            addLanguageWindowViewModel.CloseAddLanguageWindowRequested += OnCloseAddLanguageWindowRequested;
+            DataContext = addStageWindowViewModel;
+            addStageWindowViewModel.CloseAddStageWindowRequested += OnCloseAddStageWindowRequested;
         }
 
-        private void OnCloseAddLanguageWindowRequested(object? sender, EventArgs e)
+        private void OnCloseAddStageWindowRequested(object? sender, EventArgs e)
         {
             Close();
         }

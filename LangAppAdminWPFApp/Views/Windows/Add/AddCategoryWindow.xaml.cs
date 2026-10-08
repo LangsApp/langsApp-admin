@@ -1,4 +1,4 @@
-﻿using LangApp.Admin.WPF.ViewModels.WindowsViewModels;
+﻿using LangApp.Admin.WPF.ViewModels.WindowsViewModels.Add;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,18 +16,18 @@ using System.Windows.Shapes;
 namespace LangApp.Admin.WPF.Views.Windows
 {
     /// <summary>
-    /// Interaction logic for AddStageWindow.xaml
+    /// Interaction logic for AddCategoryWindow.xaml
     /// </summary>
-    public partial class AddStageWindow : Window
+    public partial class AddCategoryWindow : Window
     {
-        public AddStageWindow(AddStageWindowViewModel addStageWindowViewModel)
+        public AddCategoryWindow(AddCategoryWindowViewModel addCategoryWindowViewModel)
         {
             InitializeComponent();
-            DataContext = addStageWindowViewModel;
-            addStageWindowViewModel.CloseAddStageWindowRequested += OnCloseAddStageWindowRequested;
+            DataContext = addCategoryWindowViewModel;
+            addCategoryWindowViewModel.CloseAddCategoryWindowRequested += OnCloseAddCategoryWindowRequested;
         }
 
-        private void OnCloseAddStageWindowRequested(object? sender, EventArgs e)
+        private void OnCloseAddCategoryWindowRequested(object? sender, EventArgs e)
         {
             Close();
         }

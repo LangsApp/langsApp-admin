@@ -12,7 +12,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
-namespace LangApp.Admin.WPF.ViewModels.WindowsViewModels
+namespace LangApp.Admin.WPF.ViewModels.WindowsViewModels.Edit
 {
     public class EditCategoryWindowViewModel : INotifyPropertyChanged
     {

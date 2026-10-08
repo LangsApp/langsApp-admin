@@ -1,0 +1,186 @@
+﻿<Window x:Class="LangApp.Admin.WPF.Views.Windows.Edit.EditWordWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d"
+        Title="Edit base word"
+        Width="620"
+        Height="450"
+        WindowStartupLocation="CenterOwner"
+        ResizeMode="NoResize"
+        Background="#F8FAFC">
+
+    <Window.Resources>
+
+        <Style x:Key="InputStyle"
+               TargetType="TextBox">
+            <Setter Property="Height" Value="40"/>
+            <Setter Property="Padding" Value="10,7"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="BorderBrush" Value="#CBD5E1"/>
+            <Setter Property="BorderThickness" Value="1"/>
+        </Style>
+
+        <Style x:Key="LabelStyle"
+               TargetType="TextBlock">
+            <Setter Property="Margin" Value="0,0,0,8"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Foreground" Value="#334155"/>
+        </Style>
+
+        <Style x:Key="CurrentValueStyle"
+               TargetType="TextBlock">
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Foreground" Value="#64748B"/>
+            <Setter Property="TextWrapping" Value="Wrap"/>
+        </Style>
+
+        <Style x:Key="CurrentValueBorderStyle"
+               TargetType="Border">
+            <Setter Property="MinHeight" Value="40"/>
+            <Setter Property="Padding" Value="10,7"/>
+            <Setter Property="Background" Value="#F1F5F9"/>
+            <Setter Property="BorderBrush" Value="#CBD5E1"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="CornerRadius" Value="2"/>
+        </Style>
+
+        <Style x:Key="PrimaryButtonStyle"
+               TargetType="Button">
+            <Setter Property="Height" Value="40"/>
+            <Setter Property="Padding" Value="20,0"/>
+            <Setter Property="Background" Value="#8B7CF6"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Cursor" Value="Hand"/>
+        </Style>
+
+        <Style x:Key="SecondaryButtonStyle"
+               TargetType="Button">
+            <Setter Property="Height" Value="40"/>
+            <Setter Property="Padding" Value="20,0"/>
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="Foreground" Value="#475569"/>
+            <Setter Property="BorderBrush" Value="#CBD5E1"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Cursor" Value="Hand"/>
+        </Style>
+
+    </Window.Resources>
+
+    <Grid Margin="28">
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="22"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="22"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!-- Header -->
+
+        <StackPanel Grid.Row="0">
+
+            <TextBlock Text="Edit base word"
+                       FontSize="26"
+                       FontWeight="Bold"
+                       Foreground="#172554"/>
+
+            <TextBlock Text="Change the selected base word"
+                       Margin="0,6,0,0"
+                       FontSize="14"
+                       Foreground="#64748B"/>
+
+        </StackPanel>
+
+        <!-- Current values -->
+
+        <Grid Grid.Row="2">
+
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="16"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <StackPanel Grid.Column="0">
+
+                <TextBlock Text="Current normalized word"
+                           Style="{StaticResource LabelStyle}"/>
+
+                <Border Style="{StaticResource CurrentValueBorderStyle}">
+
+                    <TextBlock Text="{Binding WordToEdit.NormalizedWord}"
+                               Style="{StaticResource CurrentValueStyle}"/>
+
+                </Border>
+
+            </StackPanel>
+
+            <StackPanel Grid.Column="2">
+
+                <TextBlock Text="Current display word"
+                           Style="{StaticResource LabelStyle}"/>
+
+                <Border Style="{StaticResource CurrentValueBorderStyle}">
+
+                    <TextBlock Text="{Binding WordToEdit.DisplayWord}"
+                               Style="{StaticResource CurrentValueStyle}"/>
+
+                </Border>
+
+            </StackPanel>
+
+        </Grid>
+
+        <!-- New value -->
+
+        <StackPanel Grid.Row="4">
+
+            <TextBlock Text="New word"
+                       Style="{StaticResource LabelStyle}"/>
+
+            <TextBox Style="{StaticResource InputStyle}"
+                     Text="{Binding NewWord,
+                                    UpdateSourceTrigger=PropertyChanged}"/>
+
+        </StackPanel>
+
+        <!-- Error -->
+
+        <TextBlock Grid.Row="5"
+                   Text="{Binding ErrorMessage}"
+                   Margin="0,8,0,0"
+                   Foreground="#DC2626"
+                   TextWrapping="Wrap"/>
+
+        <!-- Actions -->
+
+        <StackPanel Grid.Row="7"
+                    Orientation="Horizontal"
+                    HorizontalAlignment="Right">
+
+            <Button Content="Cancel"
+                    Width="100"
+                    Margin="0,0,10,0"
+                    Style="{StaticResource SecondaryButtonStyle}"
+                    Command="{Binding CloseEditWordWindowCommand}"/>
+
+            <Button Content="Save"
+                    Width="120"
+                    Style="{StaticResource PrimaryButtonStyle}"
+                    Command="{Binding SaveEditedWordCommand}"/>
+
+        </StackPanel>
+
+    </Grid>
+
+</Window>

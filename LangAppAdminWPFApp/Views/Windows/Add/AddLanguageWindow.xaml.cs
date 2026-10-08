@@ -1,4 +1,4 @@
-﻿using LangApp.Admin.WPF.ViewModels.WindowsViewModels;
+﻿using LangApp.Admin.WPF.ViewModels.WindowsViewModels.Add;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,18 +16,18 @@ using System.Windows.Shapes;
 namespace LangApp.Admin.WPF.Views.Windows
 {
     /// <summary>
-    /// Interaction logic for AddWordWindow.xaml
+    /// Interaction logic for AddLanguageWindow.xaml
     /// </summary>
-    public partial class AddWordWindow : Window
+    public partial class AddLanguageWindow : Window
     {
-        public AddWordWindow(AddWordWindowViewModel addWordWindowViewModel)
+        public AddLanguageWindow(AddLanguageWindowViewModel addLanguageWindowViewModel)
         {
             InitializeComponent();
-            DataContext = addWordWindowViewModel;
-            addWordWindowViewModel.CloseAddWordWindowRequested += OnCloseAddWordWindowRequested;
+            DataContext = addLanguageWindowViewModel;
+            addLanguageWindowViewModel.CloseAddLanguageWindowRequested += OnCloseAddLanguageWindowRequested;
         }
 
-        private void OnCloseAddWordWindowRequested(object? sender, EventArgs e)
+        private void OnCloseAddLanguageWindowRequested(object? sender, EventArgs e)
         {
             Close();
         }

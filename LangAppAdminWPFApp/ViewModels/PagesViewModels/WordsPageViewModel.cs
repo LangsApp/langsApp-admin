@@ -22,6 +22,7 @@ namespace LangApp.Admin.WPF.ViewModels.PagesViewModels
         private List<BaseWord> _allBaseWords = [];
         private PaginateViewModel<BaseWord> _paginateViewModel = new(0, 1, PageSize);
         private ICommand? _openAddWordCommand;
+        private ICommand? _openEditWordCommand;
 
         public int CurrentPage => _paginateViewModel.PaginateNumber;
         public event PropertyChangedEventHandler? PropertyChanged;
@@ -43,6 +44,8 @@ namespace LangApp.Admin.WPF.ViewModels.PagesViewModels
         }
 
         public ICommand OpenAddWordCommand => _openAddWordCommand ??= new RelayCommand(OpenAddWordWindow);
+        public ICommand OpenEditWordCommand => _openEditWordCommand
+            ??= new RelayCommand(OpenEditWordWindow, CanOpenEditWordCommand);
         public ICommand PreviousPageCommand { get; }
         public ICommand NextPageCommand { get; }
 
@@ -80,6 +83,18 @@ namespace LangApp.Admin.WPF.ViewModels.PagesViewModels
             CommandManager.InvalidateRequerySuggested();
         }
 
+        private void OpenEditWordWindow(object? param)
+        {
+            if(param is not BaseWord baseWord)
+            {
+                return;
+            }
+            _dialogService.OpenEditWordDialog(baseWord);
+        }
+        private bool CanOpenEditWordCommand(object? param)
+        {
+            return param is BaseWord;
+        }
         private void NotifyPropertyChanged([CallerMemberName] string? name = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));

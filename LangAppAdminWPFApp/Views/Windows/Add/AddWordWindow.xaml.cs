@@ -1,4 +1,4 @@
-﻿using LangApp.Admin.WPF.ViewModels.WindowsViewModels;
+﻿using LangApp.Admin.WPF.ViewModels.WindowsViewModels.Add;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,18 +16,18 @@ using System.Windows.Shapes;
 namespace LangApp.Admin.WPF.Views.Windows
 {
     /// <summary>
-    /// Interaction logic for AddCategoryWindow.xaml
+    /// Interaction logic for AddWordWindow.xaml
     /// </summary>
-    public partial class AddCategoryWindow : Window
+    public partial class AddWordWindow : Window
     {
-        public AddCategoryWindow(AddCategoryWindowViewModel addCategoryWindowViewModel)
+        public AddWordWindow(AddWordWindowViewModel addWordWindowViewModel)
         {
             InitializeComponent();
-            DataContext = addCategoryWindowViewModel;
-            addCategoryWindowViewModel.CloseAddCategoryWindowRequested += OnCloseAddCategoryWindowRequested;
+            DataContext = addWordWindowViewModel;
+            addWordWindowViewModel.CloseAddWordWindowRequested += OnCloseAddWordWindowRequested;
         }
 
-        private void OnCloseAddCategoryWindowRequested(object? sender, EventArgs e)
+        private void OnCloseAddWordWindowRequested(object? sender, EventArgs e)
         {
             Close();
         }

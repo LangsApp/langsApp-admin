@@ -2,9 +2,12 @@
 using LangApp.Admin.WPF.Services.Interfaces;
 using LangApp.Admin.WPF.ViewModels.PagesViewModels;
 using LangApp.Admin.WPF.ViewModels.WindowsViewModels;
+using LangApp.Admin.WPF.ViewModels.WindowsViewModels.Add;
+using LangApp.Admin.WPF.ViewModels.WindowsViewModels.Edit;
 using LangApp.Admin.WPF.Views;
 using LangApp.Admin.WPF.Views.PagesViews;
 using LangApp.Admin.WPF.Views.Windows;
+using LangApp.Admin.WPF.Views.Windows.Edit;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System.Configuration;
@@ -77,6 +80,10 @@ namespace LangAppAdminWPFApp
             builder.Services.AddTransient<EditLanguageWindowViewModel>();
             builder.Services.AddTransient<EditStageWindow>();
             builder.Services.AddTransient<EditStageWindowViewModel>();
+            builder.Services.AddTransient<EditTranslateWindow>();
+            builder.Services.AddTransient<EditTranslateWindowViewModel>();
+            builder.Services.AddTransient<EditWordWindow>();
+            builder.Services.AddTransient<EditWordWindowViewModel>();
 
 
 

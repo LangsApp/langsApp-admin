@@ -11,7 +11,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
-namespace LangApp.Admin.WPF.ViewModels.WindowsViewModels
+namespace LangApp.Admin.WPF.ViewModels.WindowsViewModels.Add
 {
     public class AddLanguageWindowViewModel : INotifyPropertyChanged
     {

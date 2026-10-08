@@ -1,4 +1,5 @@
-﻿using LangApp.Admin.WPF.Models;
+﻿using LangApp.Admin.WPF.DTOs.Requests;
+using LangApp.Admin.WPF.Models;
 using LangApp.Admin.WPF.Services.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -54,6 +55,32 @@ namespace LangApp.Admin.WPF.Services
             {
                 throw new Exception($"Create translates failed: {ex.Message}");
 
+            }
+        }
+
+        public async Task<string> UpdateTranslatesAsync(EditTranslateDTO editedTranslateDTO, 
+            CancellationToken cancellationToken)
+        {
+            try
+            {
+                _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue
+                ("Bearer", _tokenStorage.AccessToken);
+
+                var response = await _client.PutAsJsonAsync("api/Translates/update-translate", editedTranslateDTO, cancellationToken);
+                if(response.IsSuccessStatusCode)
+                {
+                    var result = await response.Content.ReadAsStringAsync(cancellationToken: cancellationToken);
+                    return result ?? throw new Exception("Translate didn`t update");
+                }
+                else
+                {
+                    var errorMessage = await response.Content.ReadAsStringAsync(cancellationToken);
+                    throw new Exception($"Edit translate failed: {response.StatusCode} - {errorMessage}");
+                }
+            }
+            catch(Exception ex)
+            {
+                throw new Exception($"Edit language failed: {ex.Message}");
             }
         }
     }

@@ -1,6 +1,7 @@
 ﻿using LangApp.Admin.WPF.Models;
 using LangApp.Admin.WPF.Services.Interfaces;
 using LangApp.Admin.WPF.Views.Windows;
+using LangApp.Admin.WPF.Views.Windows.Edit;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -54,6 +55,17 @@ namespace LangApp.Admin.WPF.Services
         public void OpenEditStageDialog(Stage selectedStage)
         {
             EditStageWindow window = _windowFactory.Create<EditStageWindow>(selectedStage);
+            window.ShowDialog();
+        }
+
+        public void OpenEditTranslateDialog(Translate selectedTranslate)
+        {
+            EditTranslateWindow window = _windowFactory.Create<EditTranslateWindow>(selectedTranslate);
+            window.ShowDialog();
+        }
+        public void OpenEditWordDialog(BaseWord selectedWord)
+        {
+            EditWordWindow window = _windowFactory.Create<EditWordWindow>(selectedWord);
             window.ShowDialog();
         }
     }

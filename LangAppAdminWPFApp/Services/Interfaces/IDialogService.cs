@@ -16,5 +16,7 @@ namespace LangApp.Admin.WPF.Services.Interfaces
         void OpenEditCategoryDialog(Category selectedCategory);
         void OpenEditLanguageDialog(Language selectedLanguage);
         void OpenEditStageDialog(Stage selectedStage);
+        void OpenEditTranslateDialog(Translate selectedTranslate);
+        void OpenEditWordDialog(BaseWord selectedWord);
     }
 }
