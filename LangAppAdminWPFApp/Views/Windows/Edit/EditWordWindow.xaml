@@ -118,7 +118,7 @@
 
                 <Border Style="{StaticResource CurrentValueBorderStyle}">
 
-                    <TextBlock Text="{Binding WordToEdit.NormalizedWord}"
+                    <TextBlock Text="{Binding BaseWordToEdit.NormalizedWord}"
                                Style="{StaticResource CurrentValueStyle}"/>
 
                 </Border>
@@ -132,7 +132,7 @@
 
                 <Border Style="{StaticResource CurrentValueBorderStyle}">
 
-                    <TextBlock Text="{Binding WordToEdit.DisplayWord}"
+                    <TextBlock Text="{Binding BaseWordToEdit.DisplayWord}"
                                Style="{StaticResource CurrentValueStyle}"/>
 
                 </Border>

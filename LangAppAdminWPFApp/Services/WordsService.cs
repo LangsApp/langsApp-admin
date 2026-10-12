@@ -84,5 +84,30 @@ namespace LangApp.Admin.WPF.Services
                 throw new Exception($"An error occurred while adding the word: {ex.Message}", ex);
             }
         }
+
+        public async Task<string> EditWordAsync(EditWordDTO editWordDTO, CancellationToken cancellationToken)
+        {
+            try
+            {
+                _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue
+                ("Bearer", _tokenStorage.AccessToken);
+
+                var response = await _client.PutAsJsonAsync("api/Words/update-baseWord", editWordDTO, cancellationToken);
+                if (response.IsSuccessStatusCode)
+                {
+                    var result = await response.Content.ReadAsStringAsync(cancellationToken: cancellationToken);
+                    return result ?? throw new Exception("Word didn`t update");
+                }
+                else
+                {
+                    var errorMessage = await response.Content.ReadAsStringAsync(cancellationToken);
+                    throw new Exception($"Edit word failed: {response.StatusCode} - {errorMessage}");
+                }
+            }
+            catch(Exception ex)
+            {
+                throw new Exception($"Edit word failed: {ex.Message}");
+            }
+        }
     }
 }

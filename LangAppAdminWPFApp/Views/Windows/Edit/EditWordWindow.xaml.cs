@@ -27,7 +27,13 @@ namespace LangApp.Admin.WPF.Views.Windows.Edit
             InitializeComponent();
             DataContext = editWordViewModel;
 
+            editWordViewModel.BaseWordToEdit = selectedWord;
+            editWordViewModel.CloseEditWordWindowRequested += OnCloseEditWordWindowRequested;
+        }
 
+        private void OnCloseEditWordWindowRequested(object? sender, EventArgs e)
+        {
+            Close();
         }
     }
 }
