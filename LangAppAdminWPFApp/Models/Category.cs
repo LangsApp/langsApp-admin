@@ -13,7 +13,7 @@ namespace LangApp.Admin.WPF.Models
         private string name = string.Empty;
         public event PropertyChangedEventHandler? PropertyChanged;
 
-        public Guid Id { get; private set; }
+        public Guid Id { get; set; }
 
         public string Name
         {

@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 namespace LangApp.Admin.WPF.DTOs.Requests
 {
     public class EditCategoryDTO
-    {   
+    {   public Guid Id { get; set; }
         public string CategoryToEditName { get; set; } = string.Empty;
         public string EditedCategory { get; set; } = string.Empty;
     }

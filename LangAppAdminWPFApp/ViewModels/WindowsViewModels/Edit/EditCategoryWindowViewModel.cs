@@ -45,6 +45,7 @@ namespace LangApp.Admin.WPF.ViewModels.WindowsViewModels.Edit
                 _cancellationTokenSource = new CancellationTokenSource();
                 _editCategoryDTO = new EditCategoryDTO
                 {
+                    Id = CategoryToEdit.Id,
                     CategoryToEditName = CategoryToEdit.Name,
                     EditedCategory = _newName
                 };
