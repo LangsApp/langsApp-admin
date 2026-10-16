@@ -8,6 +8,7 @@ namespace LangApp.Admin.WPF.DTOs.Requests
 {
     public class EditTranslateDTO
     {
+        public Guid Id { get; set; }
         public string TranslateToEdit { get; set; } = string.Empty;
         public string EditedTranslate { get;set; } = string.Empty;
     }

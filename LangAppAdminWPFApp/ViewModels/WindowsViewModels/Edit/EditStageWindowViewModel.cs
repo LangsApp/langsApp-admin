@@ -82,6 +82,7 @@ namespace LangApp.Admin.WPF.ViewModels.WindowsViewModels.Edit
                     _cancellationTokenSource = new CancellationTokenSource();
                 _editStageDTO = new EditStageDTO
                 {
+                    Id = StageToEdit!.Id, 
                     NameToEdit = StageToEdit!.Name,
                     EditedOrder = orderDTO,
                     EditedName = string.IsNullOrWhiteSpace(_newName)

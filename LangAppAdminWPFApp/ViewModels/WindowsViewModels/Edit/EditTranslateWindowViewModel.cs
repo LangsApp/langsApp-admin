@@ -44,6 +44,7 @@ namespace LangApp.Admin.WPF.ViewModels.WindowsViewModels.Edit
                 _cancellationTokenSource = new CancellationTokenSource();
                 _editTranslateDTO = new EditTranslateDTO
                 {
+                    Id = TranslateToEdit.Id,
                     TranslateToEdit = TranslateToEdit.NormalizedTranslatedWord,
                     EditedTranslate = _newTranslate
                 };

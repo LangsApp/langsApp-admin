@@ -45,6 +45,7 @@ namespace LangApp.Admin.WPF.ViewModels.WindowsViewModels.Edit
                 _cancellationTokenSource = new CancellationTokenSource();
                 _editWordDTO = new EditWordDTO
                 {
+                    Id = BaseWordToEdit!.Id,
                     WordToEdit = BaseWordToEdit!.NormalizedWord,
                     EditedWord = string.IsNullOrWhiteSpace(_editedWord)
                     ? BaseWordToEdit.NormalizedWord

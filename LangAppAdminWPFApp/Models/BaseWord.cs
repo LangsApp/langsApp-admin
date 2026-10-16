@@ -17,7 +17,7 @@ namespace LangApp.Admin.WPF.Models
         public Guid Id
         {
             get;
-            private set;
+            set;
         }
 
         public string NormalizedWord
