@@ -84,5 +84,29 @@ namespace LangApp.Admin.WPF.Services
                 throw new Exception($"Edit category failed: {ex.Message}");
             }
         }
+
+        public async Task<string> DeleteCategoryAsync(Guid id)
+        {
+            try
+            {
+                _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue
+                ("Bearer", _tokenStorage.AccessToken);
+                var response = await _client.DeleteAsync($"{id}");
+                if (response.IsSuccessStatusCode)
+                {
+                    var result = await response.Content.ReadAsStringAsync();
+                    return result ?? throw new Exception("Category wasn`t deleted");
+                }
+                else
+                {
+                    var errorMessage = await response.Content.ReadAsStringAsync();
+                    throw new Exception($"Delete category failed: {response.StatusCode} - {errorMessage}");
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Delete category failed: {ex.Message}");
+            }
+        }
     }
 }

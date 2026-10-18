@@ -24,13 +24,16 @@ namespace LangApp.Admin.WPF.ViewModels.PagesViewModels
         private PaginateViewModel<Category> _pagenateViewModel = new(0, 1, PageSize);
         private ICommand? _openAddCategoryCommand;
         private ICommand? _openEditCategoryCommand;
+        private ICommand? _deleteCategoryCommand;
 
         public int CurrentPage => _pagenateViewModel.PaginateNumber;
         public event PropertyChangedEventHandler? PropertyChanged;
         public ObservableCollection<Category> Categories => _pagenateViewModel.PageCollection;
 
 
-        public CategoriesPageViewModel(ICategoryService categoryService, IDialogService dialogService)
+        public CategoriesPageViewModel(
+            ICategoryService categoryService, 
+            IDialogService dialogService)
         {
             _pagenateViewModel.PageChanged += OnPageChanged;
 
@@ -49,6 +52,8 @@ namespace LangApp.Admin.WPF.ViewModels.PagesViewModels
         public ICommand OpenAddCategoryCommand => _openAddCategoryCommand ??= new RelayCommand(OpenAddCategoryWindow);
         public ICommand OpenEditCategoryCommand => _openEditCategoryCommand 
             ??= new RelayCommand(OpenEditCategoryWindow, CanOpenEditCategoryWindow);
+        public ICommand DeleteCategoryCommand => _deleteCategoryCommand 
+            ??= new RelayCommand(DeleteCategory);
 
         public string PageInfo
         {
@@ -96,6 +101,23 @@ namespace LangApp.Admin.WPF.ViewModels.PagesViewModels
                 return;
             }
             _dialogService.OpenEditCategoryDialog(category);
+        }
+
+        private void DeleteCategory(object? param)
+        {
+            if (param is not Category category)
+            {
+                return;
+            }
+            var result = _dialogService.ConfirmAction("Are you sure to delete ", category.Name, "Confirm deletion");
+
+            if(result)
+            {
+                _categoryService.DeleteCategoryAsync(category.Id);
+                _allCategories.Remove(category);
+                _pagenateViewModel.GetCollection(_allCategories);
+                _pagenateViewModel.ShowPage(CurrentPage);
+            }
         }
 
         private void OnPageChanged(object? sender, EventArgs e)

@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace LangApp.Admin.WPF.Services
 {
@@ -67,6 +68,19 @@ namespace LangApp.Admin.WPF.Services
         {
             EditWordWindow window = _windowFactory.Create<EditWordWindow>(selectedWord);
             window.ShowDialog();
+        }
+        public bool ConfirmAction(string message, string objToDelete, string title)
+        {
+            var result = MessageBox.Show($"{message} {objToDelete}?",
+                $"{title}",
+                MessageBoxButton.YesNo,
+                MessageBoxImage.Warning);
+
+            if(result == MessageBoxResult.Yes)
+            {
+                return true;
+            }
+            return false;
         }
     }
 }
