@@ -11,6 +11,8 @@ namespace LangApp.Admin.WPF.Models
     public class Category : INotifyPropertyChanged
     {
         private string name = string.Empty;
+        private bool _reviewed = false;
+        private bool _published = false;
         public event PropertyChangedEventHandler? PropertyChanged;
 
         public Guid Id { get; set; }
@@ -29,6 +31,30 @@ namespace LangApp.Admin.WPF.Models
             }
         }
 
+        public bool Reviewed
+        {
+            get => _reviewed;
+            set
+            {
+                if (_reviewed != value)
+                {
+                    _reviewed = value;
+                    NotifyPropertyChanged();
+                }
+            }
+        }
+        public bool Published
+        {
+            get => _published;
+            set
+            {
+                if (_published != value)
+                {
+                    _published = value;
+                    NotifyPropertyChanged();
+                }
+            }
+        }
 
         private void NotifyPropertyChanged([CallerMemberName] string? name = null)
         {

@@ -13,7 +13,8 @@ namespace LangApp.Admin.WPF.Models
         public event PropertyChangedEventHandler? PropertyChanged;
         private string name = string.Empty;
         private int order = 0;
-
+        private bool _reviewed = false;
+        private bool _published = false;
         public Guid Id 
         { 
             get; 
@@ -41,6 +42,31 @@ namespace LangApp.Admin.WPF.Models
                 if (order != value)
                 {
                     order = value;
+                    NotifyPropertyChanged();
+                }
+            }
+        }
+
+        public bool Reviewed
+        {
+            get => _reviewed;
+            set
+            {
+                if (_reviewed != value)
+                {
+                    _reviewed = value;
+                    NotifyPropertyChanged();
+                }
+            }
+        }
+        public bool Published
+        {
+            get => _published;
+            set
+            {
+                if (_published != value)
+                {
+                    _published = value;
                     NotifyPropertyChanged();
                 }
             }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Security.Policy;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -15,6 +16,8 @@ namespace LangApp.Admin.WPF.Models
         private string translateTo = string.Empty;
         private string normalizedTranslatedText = string.Empty;
         private string displayTranslatedText = string.Empty;
+        private bool _reviewed = false;
+        private bool _published = false;
 
 
         public Guid Id
@@ -70,6 +73,31 @@ namespace LangApp.Admin.WPF.Models
                 if(displayTranslatedText != value)
                 {
                     displayTranslatedText = value;
+                    NotifyPropertyChanged();
+                }
+            }
+        }
+
+        public bool Reviewed
+        {
+            get => _reviewed;
+            set
+            {
+                if (_reviewed != value)
+                {
+                    _reviewed = value;
+                    NotifyPropertyChanged();
+                }
+            }
+        }
+        public bool Published
+        {
+            get => _published;
+            set
+            {
+                if (_published != value)
+                {
+                    _published = value;
                     NotifyPropertyChanged();
                 }
             }
