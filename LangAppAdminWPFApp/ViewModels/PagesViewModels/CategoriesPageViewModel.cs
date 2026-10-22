@@ -75,7 +75,17 @@ namespace LangApp.Admin.WPF.ViewModels.PagesViewModels
             _loadCancellationTokenSource = new CancellationTokenSource();
 
             _allCategories = await _categoryService.GetCategoriesAsync(_loadCancellationTokenSource.Token);
-
+            foreach(var category in _allCategories)
+            {
+                if(category.Published)
+                {
+                    category.CanChangePublished = false;
+                }
+                if(category.Reviewed)
+                {
+                    category.CanChangeReviewed = false;
+                }
+            }
             _pagenateViewModel.GetCollection(_allCategories);
             _pagenateViewModel.ShowPage(1);
 
@@ -83,7 +93,7 @@ namespace LangApp.Admin.WPF.ViewModels.PagesViewModels
         }
 
         
-
+        
         private bool CanOpenEditCategoryWindow(object? param)
         {
             return param is Category;

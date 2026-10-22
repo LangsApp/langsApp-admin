@@ -156,32 +156,13 @@
                                     <StackPanel Orientation="Horizontal">
 
                                         <CheckBox Content="Reviewed"
-          IsChecked="{Binding IsReviewed, Mode=TwoWay}">
-                                            <CheckBox.Style>
-                                                <Style TargetType="CheckBox">
-                                                    <Setter Property="IsEnabled" Value="True"/>
+                                                  Margin="0,0,16,0"
+                                                  IsChecked="{Binding Reviewed, Mode=OneTime}"
+                                                  IsEnabled="{Binding CanChangeReviewed}"/>
 
-                                                    <Style.Triggers>
-                                                        <DataTrigger Binding="{Binding IsPublished}" Value="True">
-                                                            <Setter Property="IsEnabled" Value="False"/>
-                                                        </DataTrigger>
-                                                    </Style.Triggers>
-                                                </Style>
-                                            </CheckBox.Style>
-                                        </CheckBox>
                                         <CheckBox Content="Published"
-          IsChecked="{Binding IsPublished, Mode=TwoWay}"
-          IsEnabled="{Binding IsReviewed}">
-                                            <CheckBox.Style>
-                                                <Style TargetType="CheckBox">
-                                                    <Style.Triggers>
-                                                        <DataTrigger Binding="{Binding IsPublished}" Value="True">
-                                                            <Setter Property="IsEnabled" Value="False"/>
-                                                        </DataTrigger>
-                                                    </Style.Triggers>
-                                                </Style>
-                                            </CheckBox.Style>
-                                        </CheckBox>
+                                                  IsChecked="{Binding Published, Mode=OneTime}"
+                                                  IsEnabled="{Binding CanChangePublished}"/>
                                     </StackPanel>
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
