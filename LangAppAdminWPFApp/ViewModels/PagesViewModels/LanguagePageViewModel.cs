@@ -81,7 +81,7 @@ public class LanguagePageViewModel : INotifyPropertyChanged
     
     private bool CanOpenEditLanguageWindow(object? param)
     {
-        return param is Language;
+        return param is Language language && !language.Published;
     }
 
     private void OpenEditLanguageWindow(object? param)

@@ -53,7 +53,7 @@ namespace LangApp.Admin.WPF.ViewModels.PagesViewModels
         public ICommand OpenEditCategoryCommand => _openEditCategoryCommand 
             ??= new RelayCommand(OpenEditCategoryWindow, CanOpenEditCategoryWindow);
         public ICommand DeleteCategoryCommand => _deleteCategoryCommand 
-            ??= new RelayCommand(DeleteCategory);
+            ??= new RelayCommand(DeleteCategory, CanDeleteCategory);
 
         public string PageInfo
         {
@@ -96,7 +96,11 @@ namespace LangApp.Admin.WPF.ViewModels.PagesViewModels
         
         private bool CanOpenEditCategoryWindow(object? param)
         {
-            return param is Category;
+            return param is Category category && !category.Published;
+        }
+        private bool CanDeleteCategory(object? param)
+        {
+            return param is Category category && !category.Published;
         }
 
         private void OpenAddCategoryWindow(object? _)
