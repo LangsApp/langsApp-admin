@@ -18,6 +18,7 @@ public class LanguagePageViewModel : INotifyPropertyChanged
     private PaginateViewModel<Language> _pagenateViewModel = new(0, 1, PageSize);
     private ICommand? _openAddLanguageCommand;
     private ICommand? _openEditLanguageCommand;
+    private ICommand? _deleteLanguageCommand;
 
     public int CurrentPage => _pagenateViewModel.PaginateNumber;
     public event PropertyChangedEventHandler? PropertyChanged;
@@ -41,6 +42,8 @@ public class LanguagePageViewModel : INotifyPropertyChanged
     public ICommand OpenAddLanguageCommand => _openAddLanguageCommand ??= new RelayCommand(OpenAddLanguageWindow);
     public ICommand OpenEditLanguageCommand => _openEditLanguageCommand
         ??= new RelayCommand(OpenEditLanguageWindow, CanOpenEditLanguageWindow);
+    public ICommand DeleteLanguageCommand => _deleteLanguageCommand
+        ??= new RelayCommand(DeleteLanguage, CanDeleteLanguage);
 
     public string PageInfo
     {
@@ -83,6 +86,10 @@ public class LanguagePageViewModel : INotifyPropertyChanged
     {
         return param is Language language && !language.Published;
     }
+    private bool CanDeleteLanguage(object? param)
+    {
+        return param is Language language && !language.Published; 
+    }
 
     private void OpenEditLanguageWindow(object? param)
     {
@@ -91,6 +98,24 @@ public class LanguagePageViewModel : INotifyPropertyChanged
             return;
         }
         _dialogService.OpenEditLanguageDialog(language);
+    }
+    
+    private void DeleteLanguage(object? param)
+    {
+        if(param is not Language language)
+        {
+            return;
+        }
+
+        var result = _dialogService.ConfirmAction("Are you sure to delete ", 
+            language.Name, "Confirm deletion");
+        if(result)
+        {
+            _languageService.DeleteLanguageAsync(language.Id);
+            _allLanguages.Remove(language);
+            _pagenateViewModel.GetCollection(_allLanguages);
+            _pagenateViewModel.ShowPage(CurrentPage);
+        }
     }
 
     private void NotifyPropertyChanged([CallerMemberName] string? name = null)

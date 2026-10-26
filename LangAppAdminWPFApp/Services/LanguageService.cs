@@ -81,5 +81,31 @@ namespace LangApp.Admin.WPF.Services
                 throw new Exception($"Edit language failed: {ex.Message}");
             }
         }
+
+        public async Task<string> DeleteLanguageAsync(Guid id)
+        {
+            try
+            {
+                _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue
+                    ("Bearer", _tokenStorage.AccessToken);
+                var response = await _client.DeleteAsync($"api/AdminLangCodes/delete-language/{id}");
+                if(response.IsSuccessStatusCode)
+                {
+                    var result = await response.Content.ReadAsStringAsync();
+                    return result ?? throw new Exception("Language wasn`t deleted");
+                }
+                else
+                {
+                    var errorMessage = await response.Content.ReadAsStringAsync();
+                    throw new Exception(
+                        $"Delete language faliled: {response.StatusCode} - {errorMessage}");
+                        
+                }
+            }
+            catch(Exception ex)
+            {
+                throw new Exception($"Delete language failed: {ex.Message}");
+            }
+        }
     }
 }

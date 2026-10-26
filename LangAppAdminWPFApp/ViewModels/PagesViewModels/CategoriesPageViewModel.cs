@@ -123,7 +123,8 @@ namespace LangApp.Admin.WPF.ViewModels.PagesViewModels
             {
                 return;
             }
-            var result = _dialogService.ConfirmAction("Are you sure to delete ", category.Name, "Confirm deletion");
+            var result = _dialogService.ConfirmAction("Are you sure to delete ", 
+                category.Name, "Confirm deletion");
 
             if(result)
             {

@@ -91,7 +91,7 @@ namespace LangApp.Admin.WPF.Services
             {
                 _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue
                 ("Bearer", _tokenStorage.AccessToken);
-                var response = await _client.DeleteAsync($"{id}");
+                var response = await _client.DeleteAsync($"api/Category/delete-category/{id}");
                 if (response.IsSuccessStatusCode)
                 {
                     var result = await response.Content.ReadAsStringAsync();
