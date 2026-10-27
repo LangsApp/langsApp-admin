@@ -23,6 +23,7 @@ namespace LangApp.Admin.WPF.ViewModels.PagesViewModels
         private PaginateViewModel<Stage> _paginateViewModel = new(0, 1, PageSize);
         private ICommand? _openAddStageCommand;
         private ICommand? _openEditStageCommand;
+        private ICommand? _deleteStageCommand;
 
         public int CurrentPage => _paginateViewModel.PaginateNumber;
         public event PropertyChangedEventHandler? PropertyChanged;
@@ -56,6 +57,8 @@ namespace LangApp.Admin.WPF.ViewModels.PagesViewModels
         public ICommand OpenAddStageCommand => _openAddStageCommand ??= new RelayCommand(OpenAddStageWindow);
         public ICommand OpenEditStageCommand => _openEditStageCommand
             ??= new RelayCommand(OpenEditStageWindow, CanOpenEditStageWindow);
+        public ICommand DeleteStageCommand => _deleteStageCommand
+            ??= new RelayCommand(DeleteStage, CanDeleteStage);
 
         public async Task LoadStagesAsync()
         {
@@ -64,6 +67,17 @@ namespace LangApp.Admin.WPF.ViewModels.PagesViewModels
             _loadCancellationTokenSource = new CancellationTokenSource();
 
             _allStages = await _stageService.GetStagesAsync(_loadCancellationTokenSource.Token);
+            foreach (var stage in _allStages)
+            {
+                if (stage.Published)
+                {
+                    stage.CanChangePublished = false;
+                }
+                if (stage.Reviewed)
+                {
+                    stage.CanChangeReviewed = false;
+                }
+            }
 
             _paginateViewModel.GetCollection(_allStages);
             _paginateViewModel.ShowPage(1);
@@ -84,7 +98,11 @@ namespace LangApp.Admin.WPF.ViewModels.PagesViewModels
 
         private bool CanOpenEditStageWindow(object? param)
         {
-            return param is Stage;
+            return param is Stage stage && !stage.Published;
+        }
+        private bool CanDeleteStage(object? param)
+        {
+            return param is Stage stage && !stage.Published;
         }
 
         private void OpenEditStageWindow(object? param)
@@ -94,6 +112,24 @@ namespace LangApp.Admin.WPF.ViewModels.PagesViewModels
                 return;
             }
             _dialogService.OpenEditStageDialog(selectedStage);
+        }
+
+        private void DeleteStage(object? param)
+        {
+            if (param is not Stage stage)
+            {
+                return;
+            }
+            var result = _dialogService.ConfirmAction("Are you sure to delete ",
+                stage.Name, "Confirm deletion");
+
+            if(result)
+            {
+                _stageService.DeleteStageAsync(stage.Id);
+                _allStages.Remove(stage);
+                _paginateViewModel.GetCollection(_allStages);
+                _paginateViewModel.ShowPage(CurrentPage);
+            }
         }
 
         private void NotifyPropertyChanged([CallerMemberName] string? name = null)

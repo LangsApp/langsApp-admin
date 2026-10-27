@@ -78,5 +78,29 @@ namespace LangApp.Admin.WPF.Services.Interfaces
                 throw new Exception($"Edit stage failed: {ex.Message}");
             }
         }
+
+        public async Task<string> DeleteStageAsync(Guid id)
+        {
+            try
+            {
+                _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue
+                ("Bearer", _tokenStorage.AccessToken);
+                var response = await _client.DeleteAsync($"api/Stage/delete-stage/{id}");
+                if(response.IsSuccessStatusCode)
+                {
+                    var result = await response.Content.ReadAsStringAsync();
+                    return result ?? throw new Exception("Stage wasn`t deleted");
+                }
+                else
+                {
+                    var errorMessage = await response.Content.ReadAsStringAsync();
+                    throw new Exception($"Delete stage failed: {response.StatusCode} - {errorMessage}");
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Delete stage failed: {ex.Message}");
+            }
+        }
     }
 }
