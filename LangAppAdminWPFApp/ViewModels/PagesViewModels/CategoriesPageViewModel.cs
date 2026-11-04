@@ -21,10 +21,12 @@ namespace LangApp.Admin.WPF.ViewModels.PagesViewModels
         private CancellationTokenSource? _loadCancellationTokenSource;
         private const int PageSize = 5;
         private List<Category> _allCategories = [];
+        private List<Category> _copyAllCategories = [];
         private PaginateViewModel<Category> _pagenateViewModel = new(0, 1, PageSize);
         private ICommand? _openAddCategoryCommand;
         private ICommand? _openEditCategoryCommand;
         private ICommand? _deleteCategoryCommand;
+        private ICommand? _savePublicationChangesCommand;
 
         public int CurrentPage => _pagenateViewModel.PaginateNumber;
         public event PropertyChangedEventHandler? PropertyChanged;
@@ -54,6 +56,8 @@ namespace LangApp.Admin.WPF.ViewModels.PagesViewModels
             ??= new RelayCommand(OpenEditCategoryWindow, CanOpenEditCategoryWindow);
         public ICommand DeleteCategoryCommand => _deleteCategoryCommand 
             ??= new RelayCommand(DeleteCategory, CanDeleteCategory);
+        public ICommand SavePublicationChangesCommand => _savePublicationChangesCommand
+            ??= new RelayCommand(SavePublicationChanges, CanSavePublicationChanges);
 
         public string PageInfo
         {
@@ -75,6 +79,7 @@ namespace LangApp.Admin.WPF.ViewModels.PagesViewModels
             _loadCancellationTokenSource = new CancellationTokenSource();
 
             _allCategories = await _categoryService.GetCategoriesAsync(_loadCancellationTokenSource.Token);
+            _copyAllCategories = _allCategories;
             foreach(var category in _allCategories)
             {
                 if(category.Published)
@@ -93,7 +98,13 @@ namespace LangApp.Admin.WPF.ViewModels.PagesViewModels
         }
 
         
-        
+        private void SavePublicationChanges(object? param)
+        {
+           foreach(var category in _allCategories)
+            {
+
+            }
+        }
         private bool CanOpenEditCategoryWindow(object? param)
         {
             return param is Category category && !category.Published;

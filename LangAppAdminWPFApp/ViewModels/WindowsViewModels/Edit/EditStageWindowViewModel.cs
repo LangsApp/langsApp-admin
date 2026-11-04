@@ -115,7 +115,7 @@ namespace LangApp.Admin.WPF.ViewModels.WindowsViewModels.Edit
             {
                 return false;
             }
-            else if (string.IsNullOrWhiteSpace(newName) && string.IsNullOrWhiteSpace(newOrder))
+            else if (string.IsNullOrWhiteSpace(newName) && string.IsNullOrWhiteSpace(newOrder) || selectedStage.Published)
             {
                 return false;
             }

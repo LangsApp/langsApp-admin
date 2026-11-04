@@ -83,5 +83,29 @@ namespace LangApp.Admin.WPF.Services
                 throw new Exception($"Edit language failed: {ex.Message}");
             }
         }
+
+        public async Task<string> DeleteTranslateAsync(Guid id)
+        {
+            try
+            {
+                _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue
+                ("Bearer", _tokenStorage.AccessToken);
+                var response = await _client.DeleteAsync($"api/Translates/delete-translate/{id}");
+                if(response.IsSuccessStatusCode)
+                {
+                    var result = await response.Content.ReadAsStringAsync();
+                    return result ?? throw new Exception("Translate wasn`t deleted");
+                }
+                else
+                {
+                    var errorMessage = await response.Content.ReadAsStringAsync();
+                    throw new Exception($"Delete category failed: {response.StatusCode} - {errorMessage}");
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Delete translate failed: {ex.Message}");
+            }
+        }
     }
 }

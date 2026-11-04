@@ -39,7 +39,7 @@ namespace LangApp.Admin.WPF.ViewModels.WindowsViewModels.Edit
 
         public async Task SaveEditedTranslateAsync(object? _)
         {
-            if(!string.IsNullOrWhiteSpace(_newTranslate) && TranslateToEdit != null)
+            if(!string.IsNullOrWhiteSpace(_newTranslate) && TranslateToEdit != null && !TranslateToEdit.Published)
             {
                 _cancellationTokenSource = new CancellationTokenSource();
                 _editTranslateDTO = new EditTranslateDTO

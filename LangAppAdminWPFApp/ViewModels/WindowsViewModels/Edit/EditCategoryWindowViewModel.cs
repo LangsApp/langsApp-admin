@@ -40,7 +40,7 @@ namespace LangApp.Admin.WPF.ViewModels.WindowsViewModels.Edit
 
         public async Task SaveEditedCategoryAsync(object? _)
         {
-            if(!string.IsNullOrWhiteSpace(_newName) && CategoryToEdit != null)
+            if(!string.IsNullOrWhiteSpace(_newName) && CategoryToEdit != null && !CategoryToEdit.Published)
             {
                 _cancellationTokenSource = new CancellationTokenSource();
                 _editCategoryDTO = new EditCategoryDTO
@@ -56,6 +56,7 @@ namespace LangApp.Admin.WPF.ViewModels.WindowsViewModels.Edit
                 return;
             }
         }
+        
 
         public Category? CategoryToEdit { get; set; }
         public string NewName
@@ -75,6 +76,7 @@ namespace LangApp.Admin.WPF.ViewModels.WindowsViewModels.Edit
         {
             CloseEditCategoryWindowRequested?.Invoke(this, EventArgs.Empty);
         }
+
         private void NotifyPropertyChanged([CallerMemberName] string? name = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));

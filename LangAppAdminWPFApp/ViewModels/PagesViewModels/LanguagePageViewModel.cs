@@ -62,6 +62,17 @@ public class LanguagePageViewModel : INotifyPropertyChanged
         _loadCancellationTokenSource = new CancellationTokenSource();
 
         _allLanguages = await _languageService.GetLanguagesAsync(_loadCancellationTokenSource.Token);
+        foreach (var language in _allLanguages)
+        {
+            if (language.Published)
+            {
+                language.CanChangePublished = false;
+            }
+            if (language.Reviewed)
+            {
+                language.CanChangeReviewed = false;
+            }
+        }
 
         _pagenateViewModel.GetCollection(_allLanguages);
         _pagenateViewModel.ShowPage(1);

@@ -23,6 +23,7 @@ namespace LangApp.Admin.WPF.ViewModels.PagesViewModels
         private PaginateViewModel<BaseWord> _paginateViewModel = new(0, 1, PageSize);
         private ICommand? _openAddWordCommand;
         private ICommand? _openEditWordCommand;
+        private ICommand? _deleteBaseWordCommand;
 
         public int CurrentPage => _paginateViewModel.PaginateNumber;
         public event PropertyChangedEventHandler? PropertyChanged;
@@ -46,6 +47,8 @@ namespace LangApp.Admin.WPF.ViewModels.PagesViewModels
         public ICommand OpenAddWordCommand => _openAddWordCommand ??= new RelayCommand(OpenAddWordWindow);
         public ICommand OpenEditWordCommand => _openEditWordCommand
             ??= new RelayCommand(OpenEditWordWindow, CanOpenEditWordCommand);
+        public ICommand DeleteBaseWordCommand => _deleteBaseWordCommand
+            ??= new RelayCommand(DeleteBaseWord, CanDeleteBaseWord);
         public ICommand PreviousPageCommand { get; }
         public ICommand NextPageCommand { get; }
 
@@ -64,6 +67,17 @@ namespace LangApp.Admin.WPF.ViewModels.PagesViewModels
             _loadCancellationTokenSource = new CancellationTokenSource();
 
             _allBaseWords = await _wordsService.GetBaseWordsAsync(_loadCancellationTokenSource.Token);
+            foreach (var baseWord in _allBaseWords)
+            {
+                if (baseWord.Published)
+                {
+                    baseWord.CanChangePublished = false;
+                }
+                if (baseWord.Reviewed)
+                {
+                    baseWord.CanChangeReviewed = false;
+                }
+            }
 
             _paginateViewModel.GetCollection(_allBaseWords);
             _paginateViewModel.ShowPage(1);
@@ -91,9 +105,30 @@ namespace LangApp.Admin.WPF.ViewModels.PagesViewModels
             }
             _dialogService.OpenEditWordDialog(baseWord);
         }
+        private void DeleteBaseWord(object? param)
+        {
+            if (param is not BaseWord baseWord)
+            {
+                return;
+            }
+            var result = _dialogService.ConfirmAction("Are you sure to delete ",
+                baseWord.DisplayWord, "Confirm deletion");
+
+            if(result)
+            {
+                _wordsService.DeleteBaseWordAsync(baseWord.Id);
+                _allBaseWords.Remove(baseWord);
+                _paginateViewModel.GetCollection(_allBaseWords);
+                _paginateViewModel.ShowPage(CurrentPage);
+            }
+        }
         private bool CanOpenEditWordCommand(object? param)
         {
-            return param is BaseWord;
+            return param is BaseWord baseWord && !baseWord.Published;
+        }
+        private bool CanDeleteBaseWord(object? param)
+        {
+            return param is BaseWord baseWord && !baseWord.Published;
         }
         private void NotifyPropertyChanged([CallerMemberName] string? name = null)
         {

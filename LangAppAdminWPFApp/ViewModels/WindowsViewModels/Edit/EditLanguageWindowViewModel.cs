@@ -110,7 +110,7 @@ namespace LangApp.Admin.WPF.ViewModels.WindowsViewModels.Edit
             {
                 return false;
             }
-            else if(string.IsNullOrWhiteSpace(newLangCode) && string.IsNullOrWhiteSpace(newName))
+            else if(string.IsNullOrWhiteSpace(newLangCode) && string.IsNullOrWhiteSpace(newName) || language.Published)
             {
                 return false;
             }

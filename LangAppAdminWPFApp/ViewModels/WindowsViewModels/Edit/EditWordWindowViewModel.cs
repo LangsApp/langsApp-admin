@@ -90,7 +90,7 @@ namespace LangApp.Admin.WPF.ViewModels.WindowsViewModels.Edit
             {
                 return false;
             }
-            else if (string.IsNullOrWhiteSpace(newWord))
+            else if (string.IsNullOrWhiteSpace(newWord) || baseWord.Published)
             {
                 return false;
             }

@@ -23,6 +23,7 @@ namespace LangApp.Admin.WPF.ViewModels.PagesViewModels
         private PaginateViewModel<Translate> _paginateViewModel = new(0, 1, PageSize);
         private ICommand? _createTranslatesCommand;
         private ICommand? _openEditTranslateCommand;
+        private ICommand? _deleteTranslateCommand;
 
         public int CurrentPage => _paginateViewModel.PaginateNumber;
         public event PropertyChangedEventHandler? PropertyChanged;
@@ -48,6 +49,8 @@ namespace LangApp.Admin.WPF.ViewModels.PagesViewModels
             new AsyncRelayCommand(CreateTranslatesAsync);
         public ICommand OpenEditTranslateCommand => _openEditTranslateCommand ??=
             new RelayCommand(OpenEditTranslateWindow, CanOpenEditTranslateWindow);
+        public ICommand DeleteTranslateCommand => _deleteTranslateCommand ??=
+            new RelayCommand(DeleteTranslate, CanDeleteTranslate);
 
         public string PageInfo
         {
@@ -66,6 +69,17 @@ namespace LangApp.Admin.WPF.ViewModels.PagesViewModels
             _loadCancellationTokenSource = new CancellationTokenSource();
 
             _allTranslates = await _translatesService.GetTranslatesAsync(_loadCancellationTokenSource.Token);
+            foreach (var translate in _allTranslates)
+            {
+                if (translate.Published)
+                {
+                    translate.CanChangePublished = false;
+                }
+                if (translate.Reviewed)
+                {
+                    translate.CanChangeReviewed = false;
+                }
+            }
 
             _paginateViewModel.GetCollection(_allTranslates);
             _paginateViewModel.ShowPage(1);
@@ -98,9 +112,32 @@ namespace LangApp.Admin.WPF.ViewModels.PagesViewModels
             _dialogService.OpenEditTranslateDialog(translate);
         }
 
+        private void DeleteTranslate(object? param)
+        {
+            if (param is not Translate translate)
+            {
+                return;
+            }
+
+            var result = _dialogService.ConfirmAction("Are you sure to delete ",
+                translate.DisplayTranslatedWord, "Confirm deletion");
+
+            if(result)
+            {
+                _translatesService.DeleteTranslateAsync(translate.Id);
+                _allTranslates.Remove(translate);
+                _paginateViewModel.GetCollection(_allTranslates);
+                _paginateViewModel.ShowPage(CurrentPage);
+            }
+        }
+
         private bool CanOpenEditTranslateWindow(object? param)
         {
-            return param is Translate;
+            return param is Translate translate && !translate.Published;
+        }
+        private bool CanDeleteTranslate(object? param)
+        {
+            return param is Translate translate && !translate.Published;
         }
         private void NotifyPropertyChanged([CallerMemberName] string? name = null)
         {

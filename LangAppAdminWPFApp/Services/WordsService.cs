@@ -109,5 +109,29 @@ namespace LangApp.Admin.WPF.Services
                 throw new Exception($"Edit word failed: {ex.Message}");
             }
         }
+
+        public async Task<string> DeleteBaseWordAsync(Guid id)
+        {
+            try
+            {
+                _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue
+                ("Bearer", _tokenStorage.AccessToken);
+                var response = await _client.DeleteAsync($"api/Words/delete-baseWord/{id}");
+                if (response.IsSuccessStatusCode)
+                {
+                    var result = await response.Content.ReadAsStringAsync();
+                    return result ?? throw new Exception("Base word wasn`t deleted");
+                }
+                else
+                {
+                    var errorMessage = await response.Content.ReadAsStringAsync();
+                    throw new Exception($"Delete base word failed: {response.StatusCode} - {errorMessage}");
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Delete base word failed: {ex.Message}");
+            }
+        }
     }
 }

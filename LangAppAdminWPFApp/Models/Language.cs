@@ -5,6 +5,7 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Security.Policy;
 using System.Text;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace LangApp.Admin.WPF.Models
@@ -74,6 +75,11 @@ namespace LangApp.Admin.WPF.Models
                 }
             }
         }
+
+        [JsonIgnore]
+        public bool CanChangeReviewed { get; set; } = true;
+        [JsonIgnore]
+        public bool CanChangePublished { get; set; } = true;
         private void NotifyPropertyChanged([CallerMemberName] string? name = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));

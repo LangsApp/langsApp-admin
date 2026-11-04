@@ -15,5 +15,6 @@ namespace LangApp.Admin.WPF.Services.Interfaces
             (CreateBaseWordsByCategoryDTO newBaseWordsByCategory, CancellationToken cancellationToken);
         public Task<string> AddNewBaseWordAsync(CreateBaseWordDTO newBaseWord, CancellationToken cancellationToken);
         public Task<string> EditWordAsync(EditWordDTO editWordDTO, CancellationToken cancellationToken);
+        public Task<string> DeleteBaseWordAsync(Guid id);
     }
 }
