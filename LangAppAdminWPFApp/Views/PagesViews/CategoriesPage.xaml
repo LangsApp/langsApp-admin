@@ -157,11 +157,14 @@
 
                                         <CheckBox Content="Reviewed"
                                                   Margin="0,0,16,0"
-                                                  IsChecked="{Binding Reviewed, Mode=TwoWay}"
+                                                  IsChecked="{Binding Reviewed, 
+                                                  Mode=TwoWay,
+                                                  UpdateSourceTrigger=PropertyChanged}"
                                                   IsEnabled="{Binding CanChangeReviewed}"/>
 
                                         <CheckBox Content="Published"
-                                                  IsChecked="{Binding Published, Mode=TwoWay}"
+                                                  IsChecked="{Binding Published, Mode=TwoWay,
+                                                  UpdateSourceTrigger=PropertyChanged}"
                                                   IsEnabled="{Binding CanChangePublished}"/>
                                     </StackPanel>
                                 </DataTemplate>

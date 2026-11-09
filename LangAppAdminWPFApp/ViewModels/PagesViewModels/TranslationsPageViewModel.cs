@@ -1,4 +1,5 @@
-﻿using LangApp.Admin.WPF.Infrastructure;
+﻿using LangApp.Admin.WPF.DTOs.Requests;
+using LangApp.Admin.WPF.Infrastructure;
 using LangApp.Admin.WPF.Models;
 using LangApp.Admin.WPF.Services.Interfaces;
 using System;
@@ -20,10 +21,12 @@ namespace LangApp.Admin.WPF.ViewModels.PagesViewModels
         private CancellationTokenSource? _loadCancellationTokenSource;
         private const int PageSize = 5;
         private List<Translate> _allTranslates = [];
+        private List<Translate> _copyAllTranslates = [];
         private PaginateViewModel<Translate> _paginateViewModel = new(0, 1, PageSize);
         private ICommand? _createTranslatesCommand;
         private ICommand? _openEditTranslateCommand;
         private ICommand? _deleteTranslateCommand;
+        private ICommand? _savePublicationChangesCommand;
 
         public int CurrentPage => _paginateViewModel.PaginateNumber;
         public event PropertyChangedEventHandler? PropertyChanged;
@@ -50,7 +53,9 @@ namespace LangApp.Admin.WPF.ViewModels.PagesViewModels
         public ICommand OpenEditTranslateCommand => _openEditTranslateCommand ??=
             new RelayCommand(OpenEditTranslateWindow, CanOpenEditTranslateWindow);
         public ICommand DeleteTranslateCommand => _deleteTranslateCommand ??=
-            new RelayCommand(DeleteTranslate, CanDeleteTranslate);
+            new AsyncRelayCommand(DeleteTranslate, CanDeleteTranslate);
+        public ICommand SavePublicationChangesCommand => _savePublicationChangesCommand
+            ??= new AsyncRelayCommand(SavePublicationChanges);
 
         public string PageInfo
         {
@@ -69,6 +74,18 @@ namespace LangApp.Admin.WPF.ViewModels.PagesViewModels
             _loadCancellationTokenSource = new CancellationTokenSource();
 
             _allTranslates = await _translatesService.GetTranslatesAsync(_loadCancellationTokenSource.Token);
+            _copyAllTranslates = new List<Translate>(_allTranslates.Select(t => new Translate
+            {
+                Id = t.Id,
+                BaseWord = t.BaseWord,
+                TranslateTo = t.TranslateTo,
+                NormalizedTranslatedWord = t.NormalizedTranslatedWord,
+                DisplayTranslatedWord = t.DisplayTranslatedWord,
+                Reviewed = t.Reviewed,
+                Published = t.Published,
+                CanChangePublished = t.CanChangePublished,
+                CanChangeReviewed = t.CanChangeReviewed
+            }));
             foreach (var translate in _allTranslates)
             {
                 if (translate.Published)
@@ -87,6 +104,36 @@ namespace LangApp.Admin.WPF.ViewModels.PagesViewModels
             //ShowPage(1);
         }
         
+        private async Task SavePublicationChanges(object? param)
+        {
+            var updatedTranslates = new List<ReviewAndPublishDTO>();
+
+            foreach (var translate in _allTranslates)
+            {
+                if(translate.Published && !translate.Reviewed)
+                {
+                    _dialogService.ShowError($"Translate: {translate.Id} cannot be published without being reviewed.",
+                        "Error");
+                    continue;
+                }
+
+                if (translate.Published != _copyAllTranslates.FirstOrDefault(ct => ct.Id == translate.Id)?.Published
+                    || translate.Reviewed != _copyAllTranslates.FirstOrDefault(ct => ct.Id == translate.Id)?.Reviewed)
+                {
+                    updatedTranslates.Add(
+                        new ReviewAndPublishDTO
+                        {
+                            Id = translate.Id,
+                            Published = translate.Published,
+                            Reviewed = translate.Reviewed
+                        });
+                }
+            }
+
+            _loadCancellationTokenSource = new CancellationTokenSource();
+
+            await _translatesService.PublishTranslatesAsync(updatedTranslates, _loadCancellationTokenSource.Token);
+        }
         public async Task CreateTranslatesAsync(object? param)
         {
             _loadCancellationTokenSource?.Cancel();
@@ -112,7 +159,7 @@ namespace LangApp.Admin.WPF.ViewModels.PagesViewModels
             _dialogService.OpenEditTranslateDialog(translate);
         }
 
-        private void DeleteTranslate(object? param)
+        private async Task DeleteTranslate(object? param)
         {
             if (param is not Translate translate)
             {
@@ -124,7 +171,7 @@ namespace LangApp.Admin.WPF.ViewModels.PagesViewModels
 
             if(result)
             {
-                _translatesService.DeleteTranslateAsync(translate.Id);
+                await _translatesService.DeleteTranslateAsync(translate.Id);
                 _allTranslates.Remove(translate);
                 _paginateViewModel.GetCollection(_allTranslates);
                 _paginateViewModel.ShowPage(CurrentPage);

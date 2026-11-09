@@ -107,5 +107,31 @@ namespace LangApp.Admin.WPF.Services
                 throw new Exception($"Delete language failed: {ex.Message}");
             }
         }
+
+        public async Task<List<ReviewAndPublishDTO>> PublishLanguagesAsync
+            (List<ReviewAndPublishDTO> languages, CancellationToken cancellationToken)
+        {
+            try
+            {
+                _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue
+                    ("Bearer", _tokenStorage.AccessToken);
+
+                var response = await _client.PutAsJsonAsync("api/AdminLangCodes/publish-languages", languages, cancellationToken);
+                if (response.IsSuccessStatusCode)
+                {
+                    var result = await response.Content.ReadFromJsonAsync<List<ReviewAndPublishDTO>>(cancellationToken: cancellationToken);
+                    return result ?? throw new Exception("Languages weren`t published");
+                }
+                else
+                {
+                    var errorMessage = await response.Content.ReadAsStringAsync(cancellationToken);
+                    throw new Exception($"Publish languages failed: {response.StatusCode} - {errorMessage}");
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Publish languages failed: {ex.Message}");
+            }
+        }
     }
 }

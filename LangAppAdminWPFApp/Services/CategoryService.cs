@@ -108,5 +108,30 @@ namespace LangApp.Admin.WPF.Services
                 throw new Exception($"Delete category failed: {ex.Message}");
             }
         }
+
+        public async Task<List<ReviewAndPublishDTO>> PublishCategoriesAsync(List<ReviewAndPublishDTO> categories, CancellationToken cancellationToken)
+        {
+            try
+            {
+                _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue
+                ("Bearer", _tokenStorage.AccessToken);
+
+                var response = await _client.PutAsJsonAsync("api/Category/publish-categories", categories, cancellationToken);
+                if (response.IsSuccessStatusCode)
+                {
+                    var result = await response.Content.ReadFromJsonAsync<List<ReviewAndPublishDTO>>(cancellationToken: cancellationToken);
+                    return result ?? throw new Exception("Categories weren`t published");
+                }
+                else
+                {
+                    var errorMessage = await response.Content.ReadAsStringAsync(cancellationToken);
+                    throw new Exception($"Publish categories failed: {response.StatusCode} - {errorMessage}");
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Publish categories failed: {ex.Message}");
+            }
+        }
     }
 }

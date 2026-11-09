@@ -102,5 +102,30 @@ namespace LangApp.Admin.WPF.Services.Interfaces
                 throw new Exception($"Delete stage failed: {ex.Message}");
             }
         }
+
+        public async Task<List<ReviewAndPublishDTO>> PublishStagesAsync(List<ReviewAndPublishDTO> stages, CancellationToken cancellationToken)
+        {
+            try
+            {
+                _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue
+                ("Bearer", _tokenStorage.AccessToken);
+
+                var response = await _client.PutAsJsonAsync("api/Stage/publish-stages", stages, cancellationToken);
+                if (response.IsSuccessStatusCode)
+                {
+                    var result = await response.Content.ReadFromJsonAsync<List<ReviewAndPublishDTO>>(cancellationToken: cancellationToken);
+                    return result ?? throw new Exception("Stages didn`t publish");
+                }
+                else
+                {
+                    var errorMessage = await response.Content.ReadAsStringAsync(cancellationToken);
+                    throw new Exception($"Publish stages failed: {response.StatusCode} - {errorMessage}");
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Publish stages failed: {ex.Message}");
+            }
+        }
     }
 }

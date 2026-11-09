@@ -14,5 +14,7 @@ namespace LangApp.Admin.WPF.Services.Interfaces
         public Task<string> CreateTranslatesAsync(CancellationToken cancellationToken);
         public Task<string> UpdateTranslatesAsync(EditTranslateDTO editedTranslateDTO, CancellationToken cancellationToken);
         public Task<string> DeleteTranslateAsync(Guid id);
+        public Task<List<ReviewAndPublishDTO>> PublishTranslatesAsync(List<ReviewAndPublishDTO> translates,
+            CancellationToken cancellationToken);
     }
 }

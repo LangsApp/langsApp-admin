@@ -19,5 +19,6 @@ namespace LangApp.Admin.WPF.Services.Interfaces
         void OpenEditTranslateDialog(Translate selectedTranslate);
         void OpenEditWordDialog(BaseWord selectedWord);
         bool ConfirmAction(string message, string objToDelete, string title);
+        void ShowError(string message, string title);
     }
 }

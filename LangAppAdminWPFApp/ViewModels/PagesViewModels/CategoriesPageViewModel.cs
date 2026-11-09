@@ -1,4 +1,5 @@
-﻿using LangApp.Admin.WPF.Infrastructure;
+﻿using LangApp.Admin.WPF.DTOs.Requests;
+using LangApp.Admin.WPF.Infrastructure;
 using LangApp.Admin.WPF.Models;
 using LangApp.Admin.WPF.Services;
 using LangApp.Admin.WPF.Services.Interfaces;
@@ -6,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
@@ -55,9 +57,9 @@ namespace LangApp.Admin.WPF.ViewModels.PagesViewModels
         public ICommand OpenEditCategoryCommand => _openEditCategoryCommand 
             ??= new RelayCommand(OpenEditCategoryWindow, CanOpenEditCategoryWindow);
         public ICommand DeleteCategoryCommand => _deleteCategoryCommand 
-            ??= new RelayCommand(DeleteCategory, CanDeleteCategory);
+            ??= new AsyncRelayCommand(DeleteCategory, CanDeleteCategory);
         public ICommand SavePublicationChangesCommand => _savePublicationChangesCommand
-            ??= new RelayCommand(SavePublicationChanges, CanSavePublicationChanges);
+            ??= new AsyncRelayCommand(SavePublicationChanges);
 
         public string PageInfo
         {
@@ -79,8 +81,17 @@ namespace LangApp.Admin.WPF.ViewModels.PagesViewModels
             _loadCancellationTokenSource = new CancellationTokenSource();
 
             _allCategories = await _categoryService.GetCategoriesAsync(_loadCancellationTokenSource.Token);
-            _copyAllCategories = _allCategories;
-            foreach(var category in _allCategories)
+            _copyAllCategories = new List<Category>(_allCategories.Select(c => new Category
+            {
+                Id = c.Id,
+                Name = c.Name,
+                Published = c.Published,
+                Reviewed = c.Reviewed,
+                CanChangePublished = c.CanChangePublished,
+                CanChangeReviewed = c.CanChangeReviewed
+            }));
+
+            foreach (var category in _allCategories)
             {
                 if(category.Published)
                 {
@@ -98,12 +109,36 @@ namespace LangApp.Admin.WPF.ViewModels.PagesViewModels
         }
 
         
-        private void SavePublicationChanges(object? param)
+        private async Task SavePublicationChanges(object? param)
         {
-           foreach(var category in _allCategories)
-            {
+            //var updatedCategories = _allCategories.Where(c => c.Published != _copyAllCategories.FirstOrDefault(cc => cc.Id == c.Id)?.Published
+            //    || c.Reviewed != _copyAllCategories.FirstOrDefault(cc => cc.Id == c.Id)?.Reviewed).ToList();
 
+            var updatedCategories = new List<ReviewAndPublishDTO>();
+            foreach (var category in _allCategories)
+            {
+                if(category.Published && !category.Reviewed)
+                {
+                    _dialogService.ShowError($"Category: {category.Name} cannot be published without being reviewed.", "Error");
+                    continue;
+                }
+
+                if(category.Published != _copyAllCategories.FirstOrDefault(cc => cc.Id == category.Id)?.Published
+                    || category.Reviewed != _copyAllCategories.FirstOrDefault(cc => cc.Id == category.Id)?.Reviewed)
+                {
+                    updatedCategories.Add(
+                        new ReviewAndPublishDTO
+                        {
+                            Id = category.Id,
+                            Published = category.Published,
+                            Reviewed = category.Reviewed
+                        });
+                }
             }
+
+            _loadCancellationTokenSource = new CancellationTokenSource();
+
+            await _categoryService.PublishCategoriesAsync(updatedCategories, _loadCancellationTokenSource.Token);
         }
         private bool CanOpenEditCategoryWindow(object? param)
         {
@@ -128,7 +163,7 @@ namespace LangApp.Admin.WPF.ViewModels.PagesViewModels
             _dialogService.OpenEditCategoryDialog(category);
         }
 
-        private void DeleteCategory(object? param)
+        private async Task DeleteCategory(object? param)
         {
             if (param is not Category category)
             {
@@ -139,7 +174,7 @@ namespace LangApp.Admin.WPF.ViewModels.PagesViewModels
 
             if(result)
             {
-                _categoryService.DeleteCategoryAsync(category.Id);
+                await _categoryService.DeleteCategoryAsync(category.Id);
                 _allCategories.Remove(category);
                 _pagenateViewModel.GetCollection(_allCategories);
                 _pagenateViewModel.ShowPage(CurrentPage);

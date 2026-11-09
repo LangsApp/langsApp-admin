@@ -1,4 +1,5 @@
-﻿using LangApp.Admin.WPF.Infrastructure;
+﻿using LangApp.Admin.WPF.DTOs.Requests;
+using LangApp.Admin.WPF.Infrastructure;
 using LangApp.Admin.WPF.Models;
 using LangApp.Admin.WPF.Services.Interfaces;
 using System;
@@ -20,10 +21,12 @@ namespace LangApp.Admin.WPF.ViewModels.PagesViewModels
         private CancellationTokenSource? _loadCancellationTokenSource;
         private const int PageSize = 5;
         private List<Stage> _allStages = [];
+        private List<Stage> _copyAllStages = [];
         private PaginateViewModel<Stage> _paginateViewModel = new(0, 1, PageSize);
         private ICommand? _openAddStageCommand;
         private ICommand? _openEditStageCommand;
         private ICommand? _deleteStageCommand;
+        private ICommand? _savePublicationChangesCommand;
 
         public int CurrentPage => _paginateViewModel.PaginateNumber;
         public event PropertyChangedEventHandler? PropertyChanged;
@@ -58,7 +61,9 @@ namespace LangApp.Admin.WPF.ViewModels.PagesViewModels
         public ICommand OpenEditStageCommand => _openEditStageCommand
             ??= new RelayCommand(OpenEditStageWindow, CanOpenEditStageWindow);
         public ICommand DeleteStageCommand => _deleteStageCommand
-            ??= new RelayCommand(DeleteStage, CanDeleteStage);
+            ??= new AsyncRelayCommand(DeleteStage, CanDeleteStage);
+        public ICommand SavePublicationChangesCommand => _savePublicationChangesCommand
+            ??= new AsyncRelayCommand(SavePublicationChanges);
 
         public async Task LoadStagesAsync()
         {
@@ -67,6 +72,17 @@ namespace LangApp.Admin.WPF.ViewModels.PagesViewModels
             _loadCancellationTokenSource = new CancellationTokenSource();
 
             _allStages = await _stageService.GetStagesAsync(_loadCancellationTokenSource.Token);
+            _copyAllStages = new List<Stage>(_allStages.Select(s => new Stage
+            {
+                Id = s.Id,
+                Name = s.Name,
+                Order = s.Order,
+                Reviewed = s.Reviewed,
+                Published = s.Published,
+                CanChangeReviewed = s.CanChangeReviewed,
+                CanChangePublished = s.CanChangePublished
+            }));
+
             foreach (var stage in _allStages)
             {
                 if (stage.Published)
@@ -83,6 +99,33 @@ namespace LangApp.Admin.WPF.ViewModels.PagesViewModels
             _paginateViewModel.ShowPage(1);
         }
 
+        private async Task SavePublicationChanges(object? param)
+        {
+            var updatedStages = new List<ReviewAndPublishDTO>();
+            foreach (var stage in _allStages)
+            {
+                if(stage.Published && !stage.Reviewed)
+                {
+                    _dialogService.ShowError($"Stage: {stage.Name} cannot be published without being reviewed.",
+                        "Error");
+                    continue;
+                }
+                
+                if(stage.Published != _copyAllStages.FirstOrDefault(cs => cs.Id == stage.Id)?.Published
+                    || stage.Reviewed != _copyAllStages.FirstOrDefault(cs => cs.Id == stage.Id)?.Reviewed)
+                {
+                    updatedStages.Add(new ReviewAndPublishDTO
+                    {
+                        Id = stage.Id,
+                        Reviewed = stage.Reviewed,
+                        Published = stage.Published
+                    });
+                }
+            }
+            
+            _loadCancellationTokenSource = new CancellationTokenSource();
+            await _stageService.PublishStagesAsync(updatedStages, _loadCancellationTokenSource.Token);
+        }
         public void OpenAddStageWindow(object? _)
         {
             _dialogService.OpenAddStageDialog();
@@ -114,7 +157,7 @@ namespace LangApp.Admin.WPF.ViewModels.PagesViewModels
             _dialogService.OpenEditStageDialog(selectedStage);
         }
 
-        private void DeleteStage(object? param)
+        private async Task DeleteStage(object? param)
         {
             if (param is not Stage stage)
             {
@@ -125,7 +168,7 @@ namespace LangApp.Admin.WPF.ViewModels.PagesViewModels
 
             if(result)
             {
-                _stageService.DeleteStageAsync(stage.Id);
+                await _stageService.DeleteStageAsync(stage.Id);
                 _allStages.Remove(stage);
                 _paginateViewModel.GetCollection(_allStages);
                 _paginateViewModel.ShowPage(CurrentPage);

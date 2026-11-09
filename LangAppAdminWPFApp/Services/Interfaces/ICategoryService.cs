@@ -16,5 +16,7 @@ namespace LangApp.Admin.WPF.Services.Interfaces
 
         public Task<string> EditCategoryAsync(EditCategoryDTO editCategoryDTO, CancellationToken cancellationToken);
         public Task<string> DeleteCategoryAsync(Guid id);
+        public Task<List<ReviewAndPublishDTO>> PublishCategoriesAsync(List<ReviewAndPublishDTO> categories, 
+            CancellationToken cancellationToken);
     }
 }

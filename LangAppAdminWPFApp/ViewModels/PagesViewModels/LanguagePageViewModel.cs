@@ -1,4 +1,5 @@
-﻿using LangApp.Admin.WPF.Infrastructure;
+﻿using LangApp.Admin.WPF.DTOs.Requests;
+using LangApp.Admin.WPF.Infrastructure;
 using LangApp.Admin.WPF.Models;
 using LangApp.Admin.WPF.Services;
 using LangApp.Admin.WPF.Services.Interfaces;
@@ -15,10 +16,12 @@ public class LanguagePageViewModel : INotifyPropertyChanged
     private CancellationTokenSource? _loadCancellationTokenSource;
     private const int PageSize = 5;
     private List<Language> _allLanguages = [];
+    private List<Language> _copyAllLanguages = [];
     private PaginateViewModel<Language> _pagenateViewModel = new(0, 1, PageSize);
     private ICommand? _openAddLanguageCommand;
     private ICommand? _openEditLanguageCommand;
     private ICommand? _deleteLanguageCommand;
+    private ICommand? _savePublicationChangesCommand;
 
     public int CurrentPage => _pagenateViewModel.PaginateNumber;
     public event PropertyChangedEventHandler? PropertyChanged;
@@ -43,7 +46,9 @@ public class LanguagePageViewModel : INotifyPropertyChanged
     public ICommand OpenEditLanguageCommand => _openEditLanguageCommand
         ??= new RelayCommand(OpenEditLanguageWindow, CanOpenEditLanguageWindow);
     public ICommand DeleteLanguageCommand => _deleteLanguageCommand
-        ??= new RelayCommand(DeleteLanguage, CanDeleteLanguage);
+        ??= new AsyncRelayCommand(DeleteLanguage, CanDeleteLanguage);
+    public ICommand SavePublicationChangesCommand => _savePublicationChangesCommand
+        ??= new AsyncRelayCommand(SavePublicationChanges);
 
     public string PageInfo
     {
@@ -62,6 +67,17 @@ public class LanguagePageViewModel : INotifyPropertyChanged
         _loadCancellationTokenSource = new CancellationTokenSource();
 
         _allLanguages = await _languageService.GetLanguagesAsync(_loadCancellationTokenSource.Token);
+        _copyAllLanguages = new List<Language>(_allLanguages.Select(l => new Language
+        {
+            Id = l.Id,
+            Code = l.Code,
+            Name = l.Name,
+            Reviewed = l.Reviewed,
+            Published = l.Published,
+            CanChangeReviewed = l.CanChangeReviewed,
+            CanChangePublished = l.CanChangePublished
+        }));
+
         foreach (var language in _allLanguages)
         {
             if (language.Published)
@@ -79,7 +95,35 @@ public class LanguagePageViewModel : INotifyPropertyChanged
         
         //ShowPage(1);
     }
+    private async Task SavePublicationChanges(object? param)
+    {
+        var updatedLanguages = new List<ReviewAndPublishDTO>();
+        foreach (var language in _allLanguages)
+        {
+            if(language.Published && !language.Reviewed)
+            {
+                _dialogService.ShowError($"Language: {language.Name} " +
+                    $"cannot be published without being reviewed.", "Error");
+                continue;
+            }
 
+            if (language.Published != _copyAllLanguages.FirstOrDefault(cl => cl.Id == language.Id)?.Published
+                || language.Reviewed != _copyAllLanguages.FirstOrDefault(cl => cl.Id == language.Id)?.Reviewed)
+            {
+                updatedLanguages.Add(
+                    new ReviewAndPublishDTO
+                    {
+                        Id = language.Id,
+                        Published = language.Published,
+                        Reviewed = language.Reviewed
+                    });
+            }
+
+            _loadCancellationTokenSource = new CancellationTokenSource();
+
+            await _languageService.PublishLanguagesAsync(updatedLanguages, _loadCancellationTokenSource.Token);
+        }
+    }
     public void OpenAddLanguageWindow(object? _)
     {
         _dialogService.OpenAddLanguageDialog();
@@ -111,7 +155,7 @@ public class LanguagePageViewModel : INotifyPropertyChanged
         _dialogService.OpenEditLanguageDialog(language);
     }
     
-    private void DeleteLanguage(object? param)
+    private async Task DeleteLanguage(object? param)
     {
         if(param is not Language language)
         {
@@ -122,7 +166,7 @@ public class LanguagePageViewModel : INotifyPropertyChanged
             language.Name, "Confirm deletion");
         if(result)
         {
-            _languageService.DeleteLanguageAsync(language.Id);
+            await _languageService.DeleteLanguageAsync(language.Id);
             _allLanguages.Remove(language);
             _pagenateViewModel.GetCollection(_allLanguages);
             _pagenateViewModel.ShowPage(CurrentPage);

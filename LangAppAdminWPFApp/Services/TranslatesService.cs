@@ -107,5 +107,31 @@ namespace LangApp.Admin.WPF.Services
                 throw new Exception($"Delete translate failed: {ex.Message}");
             }
         }
+
+        public async Task<List<ReviewAndPublishDTO>> PublishTranslatesAsync(List<ReviewAndPublishDTO> translates,
+            CancellationToken cancellationToken)
+        {
+            try
+            {
+                _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue
+                ("Bearer", _tokenStorage.AccessToken);
+
+                var response = await _client.PutAsJsonAsync("api/Translates/publish-translates", translates, cancellationToken);
+                if(response.IsSuccessStatusCode)
+                {
+                    var result = await response.Content.ReadFromJsonAsync<List<ReviewAndPublishDTO>>(cancellationToken: cancellationToken);
+                    return result ?? throw new Exception("Translates weren`t published");
+                }
+                else
+                {
+                    var errorMessage = await response.Content.ReadAsStringAsync(cancellationToken);
+                    throw new Exception($"Publish translates failed: {response.StatusCode} - {errorMessage}");
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Publish translates failed: {ex.Message}");
+            }
+        }
     }
 }

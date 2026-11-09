@@ -14,5 +14,7 @@ namespace LangApp.Admin.WPF.Services.Interfaces
         public Task<string> AddNewStageAsync(CreateStageDTO newStage, CancellationToken cancellationToken);
         public Task<string> EditStageAsync(EditStageDTO newStage, CancellationToken cancellationToken);
         public Task<string> DeleteStageAsync(Guid id);
+        public Task<List<ReviewAndPublishDTO>> PublishStagesAsync(List<ReviewAndPublishDTO> stages, 
+            CancellationToken cancellationToken);
     }
 }
