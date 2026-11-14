@@ -109,7 +109,8 @@ namespace LangApp.Admin.WPF.Services
             }
         }
 
-        public async Task<List<ReviewAndPublishDTO>> PublishCategoriesAsync(List<ReviewAndPublishDTO> categories, CancellationToken cancellationToken)
+        public async Task<List<ReviewAndPublishDTO>> PublishCategoriesAsync(List<ReviewAndPublishDTO> categories, 
+            CancellationToken cancellationToken)
         {
             try
             {
@@ -119,7 +120,8 @@ namespace LangApp.Admin.WPF.Services
                 var response = await _client.PutAsJsonAsync("api/Category/publish-categories", categories, cancellationToken);
                 if (response.IsSuccessStatusCode)
                 {
-                    var result = await response.Content.ReadFromJsonAsync<List<ReviewAndPublishDTO>>(cancellationToken: cancellationToken);
+                    var result = await response.Content.ReadFromJsonAsync<List<ReviewAndPublishDTO>>(
+                        cancellationToken: cancellationToken);
                     return result ?? throw new Exception("Categories weren`t published");
                 }
                 else

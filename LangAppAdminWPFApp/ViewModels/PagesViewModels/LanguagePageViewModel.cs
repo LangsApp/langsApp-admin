@@ -118,11 +118,10 @@ public class LanguagePageViewModel : INotifyPropertyChanged
                         Reviewed = language.Reviewed
                     });
             }
-
-            _loadCancellationTokenSource = new CancellationTokenSource();
-
-            await _languageService.PublishLanguagesAsync(updatedLanguages, _loadCancellationTokenSource.Token);
         }
+        _loadCancellationTokenSource = new CancellationTokenSource();
+
+        await _languageService.PublishLanguagesAsync(updatedLanguages, _loadCancellationTokenSource.Token);
     }
     public void OpenAddLanguageWindow(object? _)
     {

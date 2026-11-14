@@ -1,4 +1,5 @@
-﻿using LangApp.Admin.WPF.Infrastructure;
+﻿using LangApp.Admin.WPF.DTOs.Requests;
+using LangApp.Admin.WPF.Infrastructure;
 using LangApp.Admin.WPF.Models;
 using LangApp.Admin.WPF.Services.Interfaces;
 using System;
@@ -20,10 +21,12 @@ namespace LangApp.Admin.WPF.ViewModels.PagesViewModels
         private CancellationTokenSource? _loadCancellationTokenSource;
         private const int PageSize = 5;
         private List<BaseWord> _allBaseWords = [];
+        private List<BaseWord> _copyAllBaseWords = [];
         private PaginateViewModel<BaseWord> _paginateViewModel = new(0, 1, PageSize);
         private ICommand? _openAddWordCommand;
         private ICommand? _openEditWordCommand;
         private ICommand? _deleteBaseWordCommand;
+        private ICommand? _savePublicationChangesCommand;
 
         public int CurrentPage => _paginateViewModel.PaginateNumber;
         public event PropertyChangedEventHandler? PropertyChanged;
@@ -49,6 +52,8 @@ namespace LangApp.Admin.WPF.ViewModels.PagesViewModels
             ??= new RelayCommand(OpenEditWordWindow, CanOpenEditWordCommand);
         public ICommand DeleteBaseWordCommand => _deleteBaseWordCommand
             ??= new RelayCommand(DeleteBaseWord, CanDeleteBaseWord);
+        public ICommand SavePublicationChangesCommand => _savePublicationChangesCommand
+            ??= new AsyncRelayCommand(SavePublicationChanges);
         public ICommand PreviousPageCommand { get; }
         public ICommand NextPageCommand { get; }
 
@@ -67,6 +72,17 @@ namespace LangApp.Admin.WPF.ViewModels.PagesViewModels
             _loadCancellationTokenSource = new CancellationTokenSource();
 
             _allBaseWords = await _wordsService.GetBaseWordsAsync(_loadCancellationTokenSource.Token);
+            _copyAllBaseWords = new List<BaseWord>(_allBaseWords.Select(bw => new BaseWord
+            {
+                Id = bw.Id,
+                NormalizedWord = bw.NormalizedWord,
+                DisplayWord = bw.DisplayWord,
+                Reviewed = bw.Reviewed,
+                Published = bw.Published,
+                CanChangePublished = bw.CanChangePublished,
+                CanChangeReviewed = bw.CanChangeReviewed
+
+            }));
             foreach (var baseWord in _allBaseWords)
             {
                 if (baseWord.Published)
@@ -83,6 +99,36 @@ namespace LangApp.Admin.WPF.ViewModels.PagesViewModels
             _paginateViewModel.ShowPage(1);
 
             //ShowPage(1);
+        }
+
+        private async Task SavePublicationChanges(object? param)
+        {
+            var updatedBaseWords = new List<ReviewAndPublishDTO>();
+            foreach (var baseWord in _allBaseWords)
+            {
+                if(baseWord.Published && !baseWord.Reviewed)
+                {
+                    _dialogService.ShowError($"Base word: {baseWord.DisplayWord} cannot be published without being reviewed.",
+                        "Error");
+                    continue;
+                }
+
+                if (baseWord.Published != _copyAllBaseWords.FirstOrDefault(cbw => cbw.Id == baseWord.Id)?.Published
+                    || baseWord.Reviewed != _copyAllBaseWords.FirstOrDefault(cbw => cbw.Id == baseWord.Id)?.Reviewed)
+                {
+                    updatedBaseWords.Add(
+                        new ReviewAndPublishDTO
+                        {
+                            Id = baseWord.Id,
+                            Published = baseWord.Published,
+                            Reviewed = baseWord.Reviewed,
+                        });
+                }
+            }
+
+            _loadCancellationTokenSource = new CancellationTokenSource();
+            
+            await _wordsService.PublishBaseWordsAsync(updatedBaseWords, _loadCancellationTokenSource.Token);
         }
 
         public void OpenAddWordWindow(object? _)

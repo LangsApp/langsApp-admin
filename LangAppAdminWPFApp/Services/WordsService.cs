@@ -133,5 +133,33 @@ namespace LangApp.Admin.WPF.Services
                 throw new Exception($"Delete base word failed: {ex.Message}");
             }
         }
+
+        public async Task<List<ReviewAndPublishDTO>> PublishBaseWordsAsync(List<ReviewAndPublishDTO> baseWords,
+            CancellationToken cancellationToken)
+        {
+            try
+            {
+                _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue
+                ("Bearer", _tokenStorage.AccessToken);
+
+                var response = await _client.PutAsJsonAsync("api/Words/publish-base-words", baseWords, cancellationToken);
+
+                if(response.IsSuccessStatusCode)
+                {
+                    var result = await response.Content.ReadFromJsonAsync<List<ReviewAndPublishDTO>>(
+                        cancellationToken: cancellationToken);
+                    return result ?? throw new Exception("Base words weren`t published");
+                }
+                else
+                {
+                    var errorMessage = await response.Content.ReadAsStringAsync(cancellationToken);
+                    throw new Exception($"Publish base words failed: {response.StatusCode} - {errorMessage}");
+                }
+            }
+            catch(Exception ex)
+            {
+                throw new Exception($"Publish base words failed: {ex.Message}");
+            }
+        }
     }
 }
