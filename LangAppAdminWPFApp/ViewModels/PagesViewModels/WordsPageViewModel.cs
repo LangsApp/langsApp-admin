@@ -51,7 +51,7 @@ namespace LangApp.Admin.WPF.ViewModels.PagesViewModels
         public ICommand OpenEditWordCommand => _openEditWordCommand
             ??= new RelayCommand(OpenEditWordWindow, CanOpenEditWordCommand);
         public ICommand DeleteBaseWordCommand => _deleteBaseWordCommand
-            ??= new RelayCommand(DeleteBaseWord, CanDeleteBaseWord);
+            ??= new AsyncRelayCommand(DeleteBaseWord, CanDeleteBaseWord);
         public ICommand SavePublicationChangesCommand => _savePublicationChangesCommand
             ??= new AsyncRelayCommand(SavePublicationChanges);
         public ICommand PreviousPageCommand { get; }
@@ -151,7 +151,7 @@ namespace LangApp.Admin.WPF.ViewModels.PagesViewModels
             }
             _dialogService.OpenEditWordDialog(baseWord);
         }
-        private void DeleteBaseWord(object? param)
+        private async Task DeleteBaseWord(object? param)
         {
             if (param is not BaseWord baseWord)
             {
@@ -162,7 +162,7 @@ namespace LangApp.Admin.WPF.ViewModels.PagesViewModels
 
             if(result)
             {
-                _wordsService.DeleteBaseWordAsync(baseWord.Id);
+                await _wordsService.DeleteBaseWordAsync(baseWord.Id);
                 _allBaseWords.Remove(baseWord);
                 _paginateViewModel.GetCollection(_allBaseWords);
                 _paginateViewModel.ShowPage(CurrentPage);

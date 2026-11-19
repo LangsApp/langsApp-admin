@@ -9,15 +9,15 @@ namespace LangApp.Admin.WPF.Infrastructure
 {
     class RelayCommand : ICommand
     {
-        private readonly Predicate<object>? canExecute;
-        private readonly Action<object>? execute;
+        private readonly Predicate<object?>? canExecute;
+        private readonly Action<object?>? execute;
         public event EventHandler? CanExecuteChanged
         {
             add => CommandManager.RequerySuggested += value;
             remove => CommandManager.RequerySuggested -= value;
         }
 
-        public RelayCommand(Action<object>? execute, Predicate<object>? canExecute = null)
+        public RelayCommand(Action<object?> execute, Predicate<object?>? canExecute = null)
         {
             this.canExecute = canExecute;
             this.execute = execute;
