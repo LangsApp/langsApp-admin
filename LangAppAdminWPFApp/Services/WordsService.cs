@@ -64,7 +64,7 @@ namespace LangApp.Admin.WPF.Services
                 _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue
                     ("Bearer", _tokenStorage.AccessToken);
 
-                var response = await _client.PostAsJsonAsync("api/Words/add-word", newBaseWord, cancellationToken);
+                var response = await _client.PostAsJsonAsync("api/Words/add-words", newBaseWord, cancellationToken);
 
                 if(response.IsSuccessStatusCode)
                 {

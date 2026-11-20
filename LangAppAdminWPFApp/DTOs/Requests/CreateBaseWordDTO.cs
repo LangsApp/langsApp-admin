@@ -8,6 +8,6 @@ namespace LangApp.Admin.WPF.DTOs.Requests
 {
     public class CreateBaseWordDTO
     {
-        public string BaseWord { get; set; } = string.Empty;
+        public List<string> BaseWord { get; set; } = new();
     }
 }

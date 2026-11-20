@@ -58,16 +58,16 @@ namespace LangApp.Admin.WPF.ViewModels.WindowsViewModels.Add
                 var request = new CreateBaseWordsByCategoryDTO
                 {
                     CategoryName = Category,
-                    Words = newWordsToSave.Select(word => new CreateBaseWordDTO { BaseWord = word }).ToList()
+                    Words = newWordsToSave.ToList()
                 };
 
                 await _wordService.AddNewBaseWordsByCategoryAsync(request, _cancellationTokenSource.Token);
             }
-            else if (newWordsToSave.Count == 1)
+            else
             {
                 var request = new CreateBaseWordDTO
                 {
-                    BaseWord = newWordsToSave.FirstOrDefault() ?? string.Empty
+                    BaseWord = newWordsToSave.ToList()
                 };
 
                 await _wordService.AddNewBaseWordAsync(request, _cancellationTokenSource.Token);
