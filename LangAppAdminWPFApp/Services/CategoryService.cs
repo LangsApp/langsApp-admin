@@ -29,6 +29,12 @@ namespace LangApp.Admin.WPF.Services
             return await _client.GetFromJsonAsync<List<Category>>("api/Category/get-categories", cancellationToken) ?? [];
         }
 
+        public async Task<List<Category>> GetPublishedCategoriesAsync(CancellationToken cancellationToken)
+        {
+            return await _client.GetFromJsonAsync<List<Category>>("api/Category/get-published-categories",
+                cancellationToken) ?? [];
+        }
+
         public async Task<string> AddNewCategoryAsync(string newCategory, CancellationToken cancellationToken)
         {
             try

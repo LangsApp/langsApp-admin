@@ -1,4 +1,5 @@
-﻿using LangApp.Admin.WPF.ViewModels.WindowsViewModels.Add;
+﻿using LangApp.Admin.WPF.ViewModels.PagesViewModels;
+using LangApp.Admin.WPF.ViewModels.WindowsViewModels.Add;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -30,6 +31,14 @@ namespace LangApp.Admin.WPF.Views.Windows
         private void OnCloseAddWordWindowRequested(object? sender, EventArgs e)
         {
             Close();
+        }
+
+        private async void CategoriesWindow_Loaded(object sender, RoutedEventArgs e)
+        {
+            if (DataContext is AddWordWindowViewModel viewModel)
+            {
+                await viewModel.LoadCategoriesAsync();
+            }
         }
     }
 }

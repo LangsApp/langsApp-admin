@@ -1,6 +1,8 @@
 ﻿<Window x:Class="LangApp.Admin.WPF.Views.Windows.AddWordWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+        Loaded="CategoriesWindow_Loaded"
         Title="Add base words"
         Width="560"
         Height="470"
@@ -11,7 +13,7 @@
 
     <Window.Resources>
 
-        <Style x:Key="InputStyle" TargetType="TextBox">
+        <Style x:Key="InputStyle" TargetType="{x:Type Control}">
             <Setter Property="Height" Value="40"/>
             <Setter Property="Padding" Value="10,7"/>
             <Setter Property="FontSize" Value="14"/>
@@ -74,9 +76,21 @@
                        FontWeight="SemiBold"
                        Foreground="#334155"/>
 
-            <TextBox Style="{StaticResource InputStyle}"
-                     Text="{Binding Category,
-                                    UpdateSourceTrigger=PropertyChanged}"/>
+            <ComboBox Style="{StaticResource InputStyle}"
+                      Text="{Binding Category,
+                      UpdateSourceTrigger=PropertyChanged}"
+                      ItemsSource="{Binding ExistCategories}"
+                      IsTextSearchEnabled="False"
+                      DisplayMemberPath="Name"
+                      IsEditable="True"
+                      IsReadOnly="False">
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="KeyUp">
+                        <i:InvokeCommandAction Command="{Binding FilterCommand}"></i:InvokeCommandAction>
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+                      
+            </ComboBox>
         </StackPanel>
 
         <Grid Grid.Row="4">
