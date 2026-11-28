@@ -2,13 +2,17 @@
 using LangApp.Admin.WPF.Infrastructure;
 using LangApp.Admin.WPF.Models;
 using LangApp.Admin.WPF.Services.Interfaces;
+using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
@@ -22,7 +26,8 @@ namespace LangApp.Admin.WPF.ViewModels.WindowsViewModels.Add
         private ICommand? _closeAddWordWindowCommand;
         private ICommand? _saveWordsCommand;
         private ICommand? _addWordsToList;
-        private ICommand? _filterCommand;
+        //private ICommand? _filterCommand;
+        private ICommand? _loadWordsFromFileCommand;
         private CancellationTokenSource? _cancellationTokenSource;
         private ObservableCollection<string> newWordsToSave = new();
         private List<Category> _existingCategories = [];
@@ -43,12 +48,53 @@ namespace LangApp.Admin.WPF.ViewModels.WindowsViewModels.Add
             _closeAddWordWindowCommand ??= new RelayCommand(CloseAddWordWindow);
         public ICommand AddWordsToListCommand => _addWordsToList ??= new RelayCommand(AddNewWordsToList);
         public ICommand SaveWordsCommand => _saveWordsCommand ??= new AsyncRelayCommand(AddNewWordsAsync);
-        public ICommand FilterCommand => _filterCommand ??= new RelayCommand(FilterCategories);
-        
+        public ICommand LoadWordsFromFileCommand =>
+            _loadWordsFromFileCommand ??= new AsyncRelayCommand(LoadWordsFromFile);
 
-        public void FilterCategories(object? param)
+        //public ICommand FilterCommand => _filterCommand ??= new RelayCommand(FilterCategories);
+
+
+        //public void FilterCategories(object? param)
+        //{
+        //    //MessageBox.Show("Test");
+        //}
+
+        public async Task LoadWordsFromFile(object? param)
         {
-            MessageBox.Show("Test");
+            var categories = new List<string>();
+
+            var words = new List<string>();
+
+            var dialog = new OpenFileDialog
+            {
+                Title = "Select a file with words",
+                Filter = "JSON files (*.json)|*.json",
+                Multiselect = false
+            };
+
+            if(dialog.ShowDialog() != true)
+            {
+                // доопрацювати повідомлення про помилку
+                return;
+            }
+
+
+            var content = await File.ReadAllTextAsync(dialog.FileName);
+
+            var dataset =
+                JsonSerializer.Deserialize<Dictionary<string, List<string>>>(content);
+
+            if(dataset == null)
+            {
+                // доопрацювати повідомлення про помилку
+                return;
+            }
+
+           foreach(var kvp in dataset)
+           {
+                categories.Add(kvp.Key);
+                words.AddRange(kvp.Value);
+           }
         }
         public void AddNewWordsToList(object? param)
         {

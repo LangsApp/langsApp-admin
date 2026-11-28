@@ -13,7 +13,8 @@
 
     <Window.Resources>
 
-        <Style x:Key="InputStyle" TargetType="{x:Type Control}">
+        <Style x:Key="InputStyle"
+               TargetType="{x:Type Control}">
             <Setter Property="Height" Value="40"/>
             <Setter Property="Padding" Value="10,7"/>
             <Setter Property="FontSize" Value="14"/>
@@ -21,7 +22,8 @@
             <Setter Property="BorderThickness" Value="1"/>
         </Style>
 
-        <Style x:Key="PrimaryButtonStyle" TargetType="Button">
+        <Style x:Key="PrimaryButtonStyle"
+               TargetType="Button">
             <Setter Property="Height" Value="40"/>
             <Setter Property="Padding" Value="20,0"/>
             <Setter Property="Background" Value="#8B7CF6"/>
@@ -31,7 +33,8 @@
             <Setter Property="Cursor" Value="Hand"/>
         </Style>
 
-        <Style x:Key="SecondaryButtonStyle" TargetType="Button">
+        <Style x:Key="SecondaryButtonStyle"
+               TargetType="Button">
             <Setter Property="Height" Value="40"/>
             <Setter Property="Padding" Value="20,0"/>
             <Setter Property="Background" Value="White"/>
@@ -78,18 +81,20 @@
 
             <ComboBox Style="{StaticResource InputStyle}"
                       Text="{Binding Category,
-                      UpdateSourceTrigger=PropertyChanged}"
+                                     UpdateSourceTrigger=PropertyChanged}"
                       ItemsSource="{Binding ExistCategories}"
-                      IsTextSearchEnabled="False"
+                      IsTextSearchEnabled="True"
                       DisplayMemberPath="Name"
                       IsEditable="True"
                       IsReadOnly="False">
-                <i:Interaction.Triggers>
+
+                <!--<i:Interaction.Triggers>
                     <i:EventTrigger EventName="KeyUp">
-                        <i:InvokeCommandAction Command="{Binding FilterCommand}"></i:InvokeCommandAction>
+                        <i:InvokeCommandAction
+                            Command="{Binding FilterCommand}"/>
                     </i:EventTrigger>
-                </i:Interaction.Triggers>
-                      
+                </i:Interaction.Triggers>-->
+
             </ComboBox>
         </StackPanel>
 
@@ -115,9 +120,10 @@
                 </Grid.ColumnDefinitions>
 
                 <TextBox Grid.Column="0"
+                         Grid.ColumnSpan="2"
                          Style="{StaticResource InputStyle}"
                          Text="{Binding NewWordText,
-                                        UpdateSourceTrigger=PropertyChanged}" Grid.ColumnSpan="2"/>
+                                        UpdateSourceTrigger=PropertyChanged}"/>
 
                 <Button Grid.Column="3"
                         Content="+ Add"
@@ -133,11 +139,26 @@
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
 
-            <TextBlock Grid.Row="0"
-                       Text="Words to add"
-                       FontSize="14"
-                       FontWeight="SemiBold"
-                       Foreground="#334155"/>
+            <Grid Grid.Row="0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+
+                <TextBlock Grid.Column="0"
+                           Text="Words to add"
+                           VerticalAlignment="Center"
+                           FontSize="14"
+                           FontWeight="SemiBold"
+                           Foreground="#334155"/>
+
+                <Button Grid.Column="1"
+                        Content="Load from file"
+                        Width="140"
+                        Height="34"
+                        Style="{StaticResource SecondaryButtonStyle}"
+                        Command="{Binding LoadWordsFromFileCommand}"/>
+            </Grid>
 
             <ListBox Grid.Row="2"
                      ItemsSource="{Binding NewWordsToSave}"
