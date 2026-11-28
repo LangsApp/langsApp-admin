@@ -18,5 +18,7 @@ namespace LangApp.Admin.WPF.Services.Interfaces
         public Task<string> DeleteBaseWordAsync(Guid id);
         public Task<List<ReviewAndPublishDTO>> PublishBaseWordsAsync(List<ReviewAndPublishDTO> baseWords,
             CancellationToken cancellationToken);
+        public Task<string> ImportWordsWithCategoriesAsync(DataSetBaseWordsNCategoriesDTO dataSet,
+            CancellationToken cancellationToken);
     }
 }

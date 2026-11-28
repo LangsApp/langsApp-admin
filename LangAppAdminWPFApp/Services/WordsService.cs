@@ -161,5 +161,34 @@ namespace LangApp.Admin.WPF.Services
                 throw new Exception($"Publish base words failed: {ex.Message}");
             }
         }
+
+        public async Task<string> ImportWordsWithCategoriesAsync(
+            DataSetBaseWordsNCategoriesDTO dataSet, CancellationToken cancellationToken)
+        {
+            try
+            {
+                _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue
+                    ("Bearer", _tokenStorage.AccessToken);
+
+                var response = await _client.PostAsJsonAsync(
+                    "api/Words/import-baseWords-by-categories", dataSet, cancellationToken);
+
+                if(response.IsSuccessStatusCode)
+                {
+                    var result = await response.Content.ReadAsStringAsync(cancellationToken: cancellationToken);
+
+                    return result ?? throw new Exception("Words didn`t add");
+                }
+                else
+                {
+                    var errorMessage = await response.Content.ReadAsStringAsync(cancellationToken);
+                    throw new Exception($"Save base words failed: {response.StatusCode} - {errorMessage}");
+                }
+            }
+            catch(Exception ex)
+            {
+                throw new Exception($"Save base words failed: {ex.Message}");
+            }
+        }
     }
 }

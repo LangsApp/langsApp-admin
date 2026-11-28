@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Data;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -61,6 +62,7 @@ namespace LangApp.Admin.WPF.ViewModels.WindowsViewModels.Add
 
         public async Task LoadWordsFromFile(object? param)
         {
+            _cancellationTokenSource = new CancellationTokenSource();
             var categories = new List<string>();
 
             var words = new List<string>();
@@ -84,17 +86,19 @@ namespace LangApp.Admin.WPF.ViewModels.WindowsViewModels.Add
             var dataset =
                 JsonSerializer.Deserialize<Dictionary<string, List<string>>>(content);
 
-            if(dataset == null)
+
+            if (dataset == null)
             {
                 // доопрацювати повідомлення про помилку
                 return;
             }
 
-           foreach(var kvp in dataset)
-           {
-                categories.Add(kvp.Key);
-                words.AddRange(kvp.Value);
-           }
+            var request = new DataSetBaseWordsNCategoriesDTO
+            {
+                DataSet = dataset
+            };
+
+            await _wordService.ImportWordsWithCategoriesAsync(request, _cancellationTokenSource.Token);
         }
         public void AddNewWordsToList(object? param)
         {
